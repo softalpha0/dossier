@@ -8,6 +8,7 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 
 import { AddProgramDialog } from "@/components/dossier/AddProgramDialog";
+import { isSample, SampleDataNotice, TrySampleDataButton } from "@/components/dossier/SampleData";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -42,6 +43,7 @@ export default function ProgramsBoard() {
   const profile = useActionQuery("get-profile", {});
   const userTz = profile.data?.profile?.timezone ?? null;
   const rows = (programs.data?.programs ?? []) as ProgramRow[];
+  const hasSamples = rows.some((r) => isSample(r.title));
 
   return (
     <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:py-10">
@@ -54,6 +56,8 @@ export default function ProgramsBoard() {
         </div>
         <AddProgramDialog size="lg" />
       </header>
+
+      {hasSamples ? <SampleDataNotice /> : null}
 
       {programs.isLoading ? (
         <BoardSkeleton />
@@ -101,6 +105,13 @@ export default function ProgramsBoard() {
           })}
         </div>
       )}
+
+      {!programs.isLoading && !programs.error && rows.length > 0 && !hasSamples ? (
+        <div className="mt-12 flex flex-col items-start gap-2 border-t pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>Want to see a finished example? Load three fictional programs next to yours — remove them any time.</p>
+          <TrySampleDataButton size="sm" />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -170,9 +181,13 @@ function EmptyBoard() {
         Paste the link to a scholarship, fellowship, grant or accelerator call. Dossier
         reads the rules and questions so nothing slips through.
       </p>
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <AddProgramDialog size="lg" />
+        <TrySampleDataButton />
       </div>
+      <p className="mt-4 text-xs text-muted-foreground">
+        Sample data is fictional: three programs, five stories and a first draft that needs work. Remove it any time.
+      </p>
     </div>
   );
 }

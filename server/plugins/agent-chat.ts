@@ -44,6 +44,8 @@ const INITIAL_TOOL_NAMES = [
   "save-voice-check",
   "readiness-check",
   "export-packet",
+  "seed-demo",
+  "remove-demo",
 ];
 
 export default createAgentChatPlugin({

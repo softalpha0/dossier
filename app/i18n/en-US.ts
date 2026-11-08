@@ -72,7 +72,7 @@ const messages = {
     database: "Database",
     expandSidebar: "Expand sidebar",
     extensions: "Extensions",
-    home: "Home",
+    home: "Ask Dossier",
     navigation: "Navigation",
     navigationDescription: "Main navigation",
     observability: "Observability",

@@ -4,6 +4,7 @@ import {
 } from "@agent-native/core/client/agent-chat";
 import { createAgentNativeAgentKitTransport } from "@agent-native/core/client/agentkit-chat/transport";
 import { useT } from "@agent-native/core/client/i18n";
+import { sendToAgentChat } from "@agent-native/core/client/agent-chat";
 import { AgentKitComposer } from "@agent-native/toolkit/app/agentkit/react/components";
 import { useAgentKitControl } from "@agent-native/toolkit/app/agentkit/react/context";
 import { CoreComposerRuntimeProvider } from "@agent-native/toolkit/app/chat/agentkit-chat/composer";
@@ -199,52 +200,39 @@ function ResourceColumn({
   );
 }
 
-export default function HomePage() {
-  const t = useT();
+const STARTERS = [
+  "What's due in the next two weeks?",
+  "Check my eligibility for all my programs.",
+  "Help me write a story about a time I led something.",
+  "Which of my answers is weakest right now, and why?",
+];
 
+export default function HomePage() {
   return (
     <div className="flex min-h-full flex-col">
-      <section className="relative isolate flex flex-1 flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 text-center">
-        <WaveBackground
-          matchPageSurface
-          className="pointer-events-none absolute inset-0 -z-10"
-        />
-        <AgentNativeIcon
-          aria-hidden="true"
-          className="h-8 w-14 text-foreground"
-        />
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-          {t("home.title")}
-        </h1>
+      <section className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-16 text-center">
+        <div>
+          <h1 className="dossier-serif text-4xl font-medium tracking-tight sm:text-5xl">Ask Dossier</h1>
+          <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
+            Your application coach. It reads program calls, drafts from your own stories, and
+            proposes edits you accept or reject — it never submits anything for you.
+          </p>
+        </div>
         <HomeAgentComposer />
+        <ul className="flex max-w-2xl flex-wrap justify-center gap-2" aria-label="Try asking">
+          {STARTERS.map((s) => (
+            <li key={s}>
+              <button
+                type="button"
+                onClick={() => sendToAgentChat({ message: s, submit: true, openSidebar: true })}
+                className="min-h-10 rounded-full border bg-card px-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+              >
+                {s}
+              </button>
+            </li>
+          ))}
+        </ul>
       </section>
-
-      <Separator />
-      <div className="grid md:grid-cols-[1fr_auto_1fr]">
-        <ResourceColumn icon={<IconBook />} title={t("home.docsTitle")}>
-          <ResourceLink href={`${DOCS_URL}/getting-started`}>
-            {t("home.docsGettingStarted")}
-          </ResourceLink>
-          <ResourceLink href={`${DOCS_URL}/getting-started-actions`}>
-            {t("home.docsAddAction")}
-          </ResourceLink>
-          <ResourceLink href={`${DOCS_URL}/getting-started-pages`}>
-            {t("home.docsAddPage")}
-          </ResourceLink>
-          <ResourceLink href={`${DOCS_URL}/key-concepts`}>
-            {t("home.docsKeyConcepts")}
-          </ResourceLink>
-        </ResourceColumn>
-        <Separator orientation="vertical" className="hidden md:block" />
-        <ResourceColumn icon={<IconUsers />} title={t("home.communityTitle")}>
-          <ResourceLink href={GITHUB_URL} icon={<IconBrandGithub />}>
-            GitHub
-          </ResourceLink>
-          <ResourceLink href={DISCORD_URL} icon={<IconBrandDiscord />}>
-            Discord
-          </ResourceLink>
-        </ResourceColumn>
-      </div>
     </div>
   );
 }
