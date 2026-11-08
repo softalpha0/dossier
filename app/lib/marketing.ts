@@ -12,3 +12,6 @@ export function isMarketingPath(pathname: string): boolean {
 export const SIGN_UP_HREF = () => appPath("/signup");
 export const SIGN_IN_HREF = () => appPath(`/sign-in?return=${encodeURIComponent("/programs")}`);
 export const APP_HREF = () => appPath("/programs");
+
+/** Where people ask questions or request account deletion. */
+export const CONTACT_EMAIL = "softonchain@gmail.com";

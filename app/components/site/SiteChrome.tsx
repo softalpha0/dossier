@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { APP_HREF, SIGN_IN_HREF, SIGN_UP_HREF } from "@/lib/marketing";
+import { APP_HREF, CONTACT_EMAIL, SIGN_IN_HREF, SIGN_UP_HREF } from "@/lib/marketing";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -158,6 +158,11 @@ function SiteFooter() {
               <Link to="/how-it-works#never" className="hover:text-foreground">
                 What Dossier never does
               </Link>
+            </li>
+            <li>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-foreground">
+                Contact
+              </a>
             </li>
           </ul>
         </nav>

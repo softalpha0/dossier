@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { SitePage, StartButton } from "@/components/site/SiteChrome";
+import { CONTACT_EMAIL } from "@/lib/marketing";
 
 const TITLE = "Privacy & safety";
 const DESCRIPTION =
@@ -100,7 +101,13 @@ const SECTIONS: { id: string; title: string; body: ReactNode }[] = [
           answers, suggestions, story-map scores and review panel.
         </p>
         <p>Sample data is fictional and can be removed with one click from your board.</p>
-        <p>To delete your whole account, contact the team that runs Dossier.</p>
+        <p>
+          To delete your whole account and everything in it, email{" "}
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Delete%20my%20Dossier%20account`} className="font-medium text-primary underline underline-offset-4">
+            {CONTACT_EMAIL}
+          </a>{" "}
+          from the address you signed up with.
+        </p>
       </>
     ),
   },
@@ -171,7 +178,11 @@ export default function Privacy() {
             ))}
             <p className="border-t pt-6 text-sm text-muted-foreground">
               Dossier is an early-stage project built for the Builder.io Agent-Native Hackathon. This page describes how the
-              app is built today. If that changes, this page changes first.
+              app is built today. If that changes, this page changes first. Questions:{" "}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="underline underline-offset-4">
+                {CONTACT_EMAIL}
+              </a>
+              .
             </p>
           </div>
         </div>

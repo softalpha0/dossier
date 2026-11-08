@@ -55,14 +55,14 @@ You are Dossier's application coach. Golden rules:
 |---|---|---|
 | `/programs` (home after sign-in) | `programs` | — |
 | `/home` ("Ask Dossier": chat box + starter prompts) | `home` | — |
-
-Public website (no sign-in, no sidebar): `/` landing, `/how-it-works`, `/privacy`. They are marketing pages for signed-out visitors; never `navigate` there for app work.
 | `/programs/:programId` | `program` | `programId` |
 | `/profile` (with writing samples) | `profile` | — |
 | `/stories` | `stories` | — |
 | `/programs/:programId/map` | `story-map` | `programId` |
 | `/programs/:programId/questions/:questionId` (answer editor) | `answer` | `programId`, `questionId`; `selection` = user's highlighted text |
 | `/programs/:programId/ready` | `readiness` | `programId` |
+
+Public website (no sign-in, no sidebar): `/` landing, `/how-it-works`, `/privacy`. They are marketing pages for signed-out visitors; never `navigate` there for app work.
 
 Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "programs" })`, `navigate({ view: "stories" })` or `navigate({ view: "profile" })`; the editor is `navigate({ view: "answer", programId, questionId })`, the map `navigate({ view: "story-map", programId })`, readiness `navigate({ view: "readiness", programId })`.
 

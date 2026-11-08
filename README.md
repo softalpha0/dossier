@@ -5,7 +5,7 @@
 ![Dossier main flow](./docs/screenshots/main-flow.gif)
 _Add a GIF or screenshot of the main flow._
 
-- **Live app:** _add link_ (use **Try with sample data** — no sign-up needed)
+- **Live app:** https://dossier-pied.vercel.app (sign up, then click **Try with sample data** on the board)
 - **Demo (Clips):** _add link_
 
 Built with **[Agent-Native](https://www.agent-native.com/docs/)** for the **Builder.io Agent-Native Hackathon**.
@@ -70,7 +70,7 @@ cp .env.example .env
 pnpm dev
 ```
 
-Open the local URL → **Continue as local dev** → **Try with sample data**.
+Open the local URL → **Continue as local dev** → **Programs** → **Try with sample data**.
 
 `.env.example`:
 
