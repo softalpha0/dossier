@@ -32,6 +32,7 @@ import {
   skeletonLayoutForPath,
   threadIdFromPath,
 } from "@/lib/chat-paths";
+import { isMarketingPath } from "@/lib/marketing";
 import { TAB_ID } from "@/lib/tab-id";
 
 import { i18nCatalog } from "./i18n";
@@ -180,15 +181,25 @@ export default function Root() {
   // The path, not the visitor, picks the shell, so the SSR shell stays one
   // cached page per URL.
   const { pathname } = useLocation();
+  // The public website (landing, how it works, privacy) renders without the
+  // session gate or the app shell; every other path is the signed-in app.
+  const isPublic = isMarketingPath(pathname);
   return (
     <AppToolkitProvider>
       <AppProviders
         queryClient={queryClient}
+        isPublicPath={isPublic}
         skeletonLayout={skeletonLayoutForPath(pathname)}
         i18n={{ catalog: i18nCatalog }}
       >
-        <DbSyncSetup />
-        <AppContent />
+        {isPublic ? (
+          <Outlet />
+        ) : (
+          <>
+            <DbSyncSetup />
+            <AppContent />
+          </>
+        )}
       </AppProviders>
     </AppToolkitProvider>
   );

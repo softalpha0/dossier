@@ -38,3 +38,5 @@ The template's framework guide is in AGENTS.md — read it too:
 - **Production env vars (set in Vercel, never in code):** `ANTHROPIC_API_KEY`, `DATABASE_URL` (Neon pooled), `DATABASE_URL_UNPOOLED` (Neon direct), `BETTER_AUTH_SECRET`, `CRON_SECRET`.
 - **The deployment's `ANTHROPIC_API_KEY` is shared by every signed-in user** and billed to the owner — keep a spend limit on that key.
 - **In the cloud dev container:** IPv6 isn't available; start the dev server with `pnpm exec agent-native dev --host 127.0.0.1 --port 8080`. `.env` has `AUTH_DISABLED=true` for local dev only.
+- **Public website = `/`, `/how-it-works`, `/privacy`** (list in `app/lib/marketing.ts`). `root.tsx` renders them with `isPublicPath` (no session gate, no app shell); `server/plugins/auth.ts` has `rootAuth: false` so `/` isn't the sign-in page. A *signed-in* visitor to `/` is sent to `/programs` by the framework — to see the landing page, use a private window. Locally (`AUTH_DISABLED`) everyone counts as signed in.
+- **Website charts** use `--dossier-chart` (`#1f8a68` light / `#47a586` dark), checked for contrast and colour-blind safety.

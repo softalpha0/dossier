@@ -305,3 +305,39 @@
     padding: 0;
   }
 }
+
+/* Dossier website: chart mark colour (validated against both surfaces). */
+:root {
+  --dossier-chart: #1f8a68;
+}
+.dark {
+  --dossier-chart: #47a586;
+}
+
+/* Dossier website: content eases in once as it scrolls into view. Content is
+   visible without JavaScript; only elements still below the fold are held back. */
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* A sentence the voice check flags: a quiet wavy underline, not a red alarm. */
+.dossier-flag {
+  text-decoration: underline wavy hsl(32 90% 45%);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
