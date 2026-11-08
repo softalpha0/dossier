@@ -1,0 +1,18 @@
+diff --git a/dist/agent/run-store.js b/dist/agent/run-store.js
+index 3f77497215fe8320687c554df08786301ed778b3..4347b908685bd926f3ba97067590974ae190947b 100644
+--- a/dist/agent/run-store.js
++++ b/dist/agent/run-store.js
+@@ -4104,11 +4104,11 @@ export async function getThreadPrivateHistoryState(threadId) {
+         SELECT 1 FROM agent_thread_private_runs p WHERE p.thread_id = ?
+         UNION ALL
+         SELECT 1 FROM agent_runs r JOIN agent_run_events e ON e.run_id = r.id
+-        WHERE r.thread_id = ? AND e.event_data::jsonb @> '{"omitFromPersistedHistory":true}'::jsonb
++        WHERE r.thread_id = ? AND e.event_data LIKE '%"omitFromPersistedHistory":true%'
+       ) AS has_private_history,
+       ARRAY(SELECT p.run_id FROM agent_thread_private_runs p WHERE p.thread_id = ?
+         UNION SELECT r.id FROM agent_runs r JOIN agent_run_events e ON e.run_id = r.id
+-        WHERE r.thread_id = ? AND e.event_data::jsonb @> '{"omitFromPersistedHistory":true}'::jsonb) AS private_run_ids,
++        WHERE r.thread_id = ? AND e.event_data LIKE '%"omitFromPersistedHistory":true%') AS private_run_ids,
+       EXISTS (
+         SELECT 1 FROM agent_runs r WHERE r.thread_id = ?
+         AND (r.thread_projection_pending IS TRUE OR r.thread_projection_error_code IS NOT NULL)
