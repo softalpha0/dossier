@@ -87,7 +87,7 @@ Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "pro
 | `resolve-suggestion` | Accept/reject only when the user explicitly tells you to. |
 | `get-voice-profile` / `save-voice-profile` / `save-voice-check` | The user's voice fingerprint from writing samples; a 0–100 "sounds like you" score with flagged sentences. |
 | `readiness-check` / `export-packet` | Rule-based ✅/❌ list with fixes; the Markdown packet. |
-| `seed-demo` / `remove-demo` | Load or remove clearly fictional sample data (three "(sample)" programs, five stories, a writing sample, one over-long draft; a sample profile only if none exists). Only when the user asks to try sample/demo data. `remove-demo` never touches the user's own data. |
+| `seed-demo` / `remove-demo` | Load or remove clearly fictional sample data (three "(sample)" programs, five stories, a writing sample, one over-long draft; a sample profile only if none exists; removed with the rest while it still has its "(sample profile)" marker). Only when the user asks to try sample/demo data. `remove-demo` never touches the user's own data. |
 | `build-review-panel` | Create the program's 3 simulated reviewers; each becomes a sub-agent profile `agents/<slug>.md`. |
 | `get-review-panel` | Reviewers (ids, names, `agentPath`) and the latest review run with its verdict. |
 | `save-panel-review` | Save one run (all reviewers' scores, best/weakest line, fix); returns average and verdict. |
@@ -106,7 +106,7 @@ Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "pro
 
 Building the panel:
 1. `get-program` and read its criteria, summary and type. If no criteria are stated, base the personas on the program type and summary and say so.
-2. `build-review-panel` with three distinct reviewers (for example an academic or technical expert, a program officer focused on mission fit, an alumni or community reviewer). Tie every rubric line to something the program states.
+2. `build-review-panel` with three distinct reviewers (for example an academic or technical expert, a program officer focused on mission fit, an alumni or community reviewer). Reviewers are named by their role only ("Academic reviewer"), never a personal name. Tie every rubric line to something the program states.
 
 Reviewing an answer (the user pastes it, or later the open answer in the editor):
 1. `get-review-panel`; build the panel first if it is empty.
@@ -118,7 +118,7 @@ Reviewing an answer (the user pastes it, or later the open answer in the editor)
 ### Workflow: eligibility check
 
 1. `get-program` (eligibility rules) and `get-profile`.
-2. For each rule decide `ok`, `blocker` or `unknown`. Only use what the profile actually says: missing fields are `unknown`, never assumed. Reasons are one plain sentence ("Your profile says Nigerian citizenship; the program is open to African citizens.").
+2. For each rule decide `ok`, `blocker` or `unknown`. Only use what the profile actually says: missing fields are `unknown`, never assumed. Reasons are one plain sentence ("Your profile says Canadian citizenship; the program is open to all nationalities.").
 3. Put the questions that would settle each `unknown` in `missing` ("What is your highest completed degree?").
 4. `save-eligibility-check`, then reply in two lines: the overall result and what to confirm. Offer to update the profile with `update-profile` once the user answers.
 

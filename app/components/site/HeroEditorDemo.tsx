@@ -12,7 +12,7 @@ const STEPS = [
 
 const FLAGGED =
   "I am passionate about making a difference in my community, and I have always been driven by a desire to help others.";
-const REWRITE = "In the 2023 rainy season, our village clinic in Ogun State ran out of malaria test kits.";
+const REWRITE = "In the winter of 2023, our neighbourhood clinic ran out of rapid flu test kits.";
 
 function useTween(target: number, ms = 900) {
   const [value, setValue] = useState(target);
@@ -104,8 +104,9 @@ export function HeroEditorDemo() {
                 ) : null}
               </p>
               <p className="text-foreground/75">
-                People were being sent home with fevers, untested. I organised 40 volunteers from my church and my old
-                school and started a WhatsApp donation drive, then drove to Abeokuta twice to collect the donated kits.
+                People were being sent home with fevers, untested. I organised 40 volunteers from my sports club and my
+                old school, started a WhatsApp donation drive, then drove to a regional supplier twice to collect the
+                donated kits.
               </p>
               <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card to-transparent" />
             </div>
@@ -132,7 +133,7 @@ export function HeroEditorDemo() {
             >
               <p className="text-xs font-medium text-amber-800 dark:text-amber-300">May sound generic</p>
               <p className="mt-1.5 text-muted-foreground line-through decoration-muted-foreground/50">I am passionate about making a difference…</p>
-              <p className="mt-1 text-foreground">In the 2023 rainy season, our village clinic…</p>
+              <p className="mt-1 text-foreground">In the winter of 2023, our neighbourhood clinic…</p>
               <p className="mt-2 text-xs text-muted-foreground">Open with what happened. Facts from your story only.</p>
               <div className="mt-3 flex gap-2" aria-hidden="true">
                 <span

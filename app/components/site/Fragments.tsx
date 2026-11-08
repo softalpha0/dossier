@@ -23,12 +23,12 @@ export function ProgramFragment() {
           </div>
           <div className="rounded-lg bg-muted/50 p-3">
             <dt className="text-xs text-muted-foreground">Deadline, yours</dt>
-            <dd className="mt-0.5 font-medium">Sat 21 Nov, 00:59 Lagos</dd>
+            <dd className="mt-0.5 font-medium">Fri 20 Nov, 18:59 Toronto</dd>
           </div>
         </dl>
         <ul className="mt-4 space-y-2 text-sm">
           <li className="flex gap-2">
-            <IconCircleCheck className="mt-0.5 size-4 shrink-0 text-primary" /> Citizen of a sub-Saharan African country
+            <IconCircleCheck className="mt-0.5 size-4 shrink-0 text-primary" /> Open to all nationalities
           </li>
           <li className="flex gap-2">
             <IconCircleCheck className="mt-0.5 size-4 shrink-0 text-primary" /> At least two years of full-time work
@@ -50,7 +50,7 @@ export function ProgramFragment() {
 }
 
 const MAP_QUESTIONS = ["Led change in your community", "Why this course", "Proudest achievement"];
-const MAP_STORIES = ["Clinic test kits", "Data club", "Yoruba leaflets", "Night shifts"];
+const MAP_STORIES = ["Clinic test kits", "Data club", "Health leaflets", "Night shifts"];
 const MAP_SCORES = [
   [92, 74, 66, 38],
   [58, 41, 71, 30],
@@ -120,7 +120,7 @@ const CHECKS = [
   { ok: true, label: "Checklist: 5 of 5 done" },
   { ok: true, label: "Question 1: 248 / 250 words" },
   { ok: true, label: "Question 2: committee says Likely shortlist" },
-  { ok: false, label: "Question 3 has no answer", fix: "Draft it from “Yoruba leaflets”" },
+  { ok: false, label: "Question 3 has no answer", fix: "Draft it from “Health leaflets”" },
 ];
 
 export function ReadinessFragment() {
@@ -166,14 +166,14 @@ export function ChatFragment() {
         <div className="max-w-[92%] space-y-2 text-sm leading-relaxed">
           <p>
             <span className="font-medium">Harbor Leaders Scholarship</span> closes Friday 20 November at 23:59 GMT. That's
-            00:59 on Saturday in Lagos.
+            18:59 on Friday in Toronto.
           </p>
           <p>Two things are left:</p>
           <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
             <li>Upload your certified transcript</li>
             <li>Question 3 has no answer yet</li>
           </ul>
-          <p>Want me to draft question 3 from your “Yoruba leaflets” story? You'll see it as a suggestion first.</p>
+          <p>Want me to draft question 3 from your “Health leaflets” story? You'll see it as a suggestion first.</p>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
           <span className="rounded-full border px-3 py-1">Draft question 3</span>

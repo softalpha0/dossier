@@ -3,6 +3,15 @@
 
 export const SAMPLE_SUFFIX = "(sample)";
 
+/** Titles used by earlier versions of the sample data, still removed by remove-demo. */
+export const LEGACY_SAMPLE_TITLES = {
+  programs: [`Kanu Ventures Seed Program ${"(sample)"}`],
+  stories: [`Clinic test drive ${"(sample)"}`, `Health leaflets in Yoruba ${"(sample)"}`],
+};
+
+/** The marker that identifies the sample profile (in its goals field). */
+export const SAMPLE_PROFILE_MARKER = "(sample profile)";
+
 type SampleProgram = {
   title: string;
   type: string;
@@ -24,13 +33,13 @@ export const SAMPLE_PROGRAMS: SampleProgram[] = [
     type: "scholarship",
     provider: "Harbor Foundation (fictional)",
     summary:
-      "A fully funded one-year master's in the UK for early-career professionals from sub-Saharan Africa who will lead change at home. Covers tuition, flights and a living stipend.",
+      "A fully funded one-year master's in the UK for early-career professionals from anywhere in the world who will lead change in their home communities. Covers tuition, flights and a living stipend.",
     daysAhead: 12,
     utcOffset: "+00:00",
     timezone: "Europe/London",
     tzLabel: "GMT",
     eligibility: [
-      { rule: "Citizen of a sub-Saharan African country", category: "citizenship" },
+      { rule: "Open to all nationalities", category: "citizenship" },
       { rule: "Bachelor's degree with at least upper second-class honours (2:1) or equivalent", category: "education" },
       { rule: "At least two years of full-time work experience", category: "experience" },
       { rule: "Meet the university's English language requirement", category: "language" },
@@ -85,17 +94,17 @@ export const SAMPLE_PROGRAMS: SampleProgram[] = [
     ],
   },
   {
-    title: `Kanu Ventures Seed Program ${SAMPLE_SUFFIX}`,
+    title: `Northbridge Ventures Seed Program ${SAMPLE_SUFFIX}`,
     type: "accelerator",
-    provider: "Kanu Ventures (fictional)",
+    provider: "Northbridge Ventures (fictional)",
     summary:
-      "A 12-week accelerator in Lagos for early-stage African startups, with a small investment, mentors and a demo day.",
+      "A 12-week remote accelerator for early-stage startups anywhere in the world, with a small investment, mentors and a demo day in Singapore.",
     daysAhead: 45,
-    utcOffset: "+01:00",
-    timezone: "Africa/Lagos",
-    tzLabel: "WAT",
+    utcOffset: "+08:00",
+    timezone: "Asia/Singapore",
+    tzLabel: "SGT",
     eligibility: [
-      { rule: "Startup headquartered in Africa", category: "residence" },
+      { rule: "Startup incorporated in any country", category: "residence" },
       { rule: "A product live with real users", category: "other" },
       { rule: "At least one founder working on it full time", category: "experience" },
     ],
@@ -118,9 +127,9 @@ export const SAMPLE_PROGRAMS: SampleProgram[] = [
 
 export const SAMPLE_STORIES = [
   {
-    title: `Clinic test drive ${SAMPLE_SUFFIX}`,
-    situation: "In the 2023 rainy season our village clinic in Ogun State ran out of malaria test kits, and people were being sent home untested.",
-    action: "I organised 40 volunteers from my church and old school, set up a WhatsApp donation drive, and drove to Abeokuta twice to collect donated kits.",
+    title: `Clinic test kits ${SAMPLE_SUFFIX}`,
+    situation: "In the winter of 2023 our neighbourhood clinic ran out of rapid flu test kits, and people were being sent home untested.",
+    action: "I organised 40 volunteers from my sports club and old school, set up a WhatsApp donation drive, and drove to a regional supplier twice to collect donated kits.",
     result: "The clinic restocked within two weeks and tested about 300 people before the peak of the season. The clinic now keeps a reorder list I set up.",
     themes: ["leadership", "community", "health"],
   },
@@ -139,10 +148,10 @@ export const SAMPLE_STORIES = [
     themes: ["failure", "resilience", "entrepreneurship"],
   },
   {
-    title: `Health leaflets in Yoruba ${SAMPLE_SUFFIX}`,
+    title: `Health leaflets in three languages ${SAMPLE_SUFFIX}`,
     situation: "Older patients at the hospital where I work couldn't read the English-only medication leaflets.",
-    action: "I translated the ten most common leaflets into Yoruba with a nurse and tested them with patients' families.",
-    result: "The hospital now prints them in both languages.",
+    action: "I translated the ten most common leaflets into the three languages most patients' families speak at home, with two nurses, and tested them with those families.",
+    result: "The hospital now prints every leaflet in all four languages.",
     themes: ["community", "health", "communication"],
   },
   {
@@ -156,7 +165,7 @@ export const SAMPLE_STORIES = [
 
 export const SAMPLE_WRITING = {
   title: `Blog post: what my mother's pharmacy taught me ${SAMPLE_SUFFIX}`,
-  content: `My mother ran a small pharmacy on a busy road in Ibadan. I spent most of my school holidays behind the counter, counting tablets into small paper envelopes and writing the dose on the front in big letters.
+  content: `My mother ran a small pharmacy on a busy road near the train station. I spent most of my school holidays behind the counter, counting tablets into small paper envelopes and writing the dose on the front in big letters.
 
 She had one rule: listen before you sell. A woman would come in asking for the strongest painkiller we had, and my mother would ask where it hurt, for how long, and what she had already taken. Half the time the answer was not a painkiller at all. Sometimes it was a referral to the clinic down the road, which meant we sold nothing.
 
@@ -167,12 +176,12 @@ At work I try to do the same. When a patient's family stops me in the corridor, 
 I am not good at speeches. I am better at noticing the small thing that is going wrong and fixing it before it becomes a big thing. My mother would say that is most of the job.`,
 };
 
-/** First answer to the scholarship's question 1: ~370 words (limit 250) with stock phrases — the demo's starting point. */
+/** First answer to the scholarship's question 1: 371 words (limit 250) with stock phrases — the demo's starting point. */
 export const SAMPLE_ANSWER = `I am passionate about making a difference in my community, and I have always been driven by a desire to help others. In today's fast-paced world, healthcare is more important than ever, and I believe that strong leadership is a testament to what one person can achieve when they step out of their comfort zone.
 
-In the 2023 rainy season, our village clinic in Ogun State ran out of malaria test kits. People were coming to the clinic with fevers and being sent home without being tested, which was dangerous because malaria can become serious very quickly, especially for children and pregnant women. The nurses were frustrated and the patients were worried, and nobody seemed to know when new kits would arrive from the state.
+In the winter of 2023, our neighbourhood clinic ran out of rapid flu test kits. People were coming to the clinic with fevers and being sent home without being tested, which was dangerous because flu can become serious very quickly, especially for older people and young children. The nurses were frustrated and the patients were worried, and nobody seemed to know when the new kits would finally arrive.
 
-I decided that I could not just watch this happen. I organised 40 volunteers from my church and my old school. We set up a WhatsApp group and started a donation drive, asking everyone we knew to contribute whatever they could. I made a simple spreadsheet to track the money and the pledges, and I shared updates every evening so people could see that their money was being used well. When kits were donated in Abeokuta, I drove there twice to collect them myself because the delivery would have taken too long.
+I decided that I could not just watch this happen. I organised 40 volunteers from my sports club and my old school. We set up a WhatsApp group and started a donation drive, asking everyone we knew to contribute whatever they could. I made a very simple spreadsheet to track the money and the pledges, and I shared updates every evening so people could see that their money was being used well. When a regional supplier donated kits, I drove there twice to collect them myself because the delivery would have taken too long.
 
 Within two weeks the clinic was restocked. Around 300 people were tested before the peak of the season. The head nurse told me that several children were treated early because of the tests. I also set up a reorder list with the clinic so that they would know when stocks were running low and could ask for help before running out again.
 

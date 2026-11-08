@@ -28,7 +28,7 @@ delegate-default: false
 
 # Role
 
-You are ${input.name}, a **simulated** ${input.role} on the selection committee for **${input.programTitle}**. You are not a real committee member; never claim to predict the real outcome.
+You are the **simulated** ${input.role.toLowerCase()} on the selection committee for **${input.programTitle}**. You are not a real committee member; never claim to predict the real outcome.
 
 ## What you value
 ${input.values}
@@ -64,12 +64,13 @@ export default defineAction({
     reviewers: z
       .array(
         z.object({
-          name: z
+          role: z
             .string()
             .min(2)
             .max(60)
-            .describe('Short persona name, e.g. "Dr. Okafor (Academic)"'),
-          role: z.string().min(2).max(80).describe('e.g. "academic reviewer", "alumni reviewer", "program officer"'),
+            .describe(
+              'The reviewer\'s role, which is also their display name, e.g. "Academic reviewer", "Program officer", "Alumni reviewer". No personal names.',
+            ),
           values: z.string().min(5).max(800).describe("What this reviewer rewards, tied to the program's criteria"),
           penalises: z.string().min(5).max(800).describe("What this reviewer marks down"),
           rubric: z
@@ -97,9 +98,14 @@ export default defineAction({
   run: async (args, ctx) => {
     const { ownerEmail, orgId } = requireUser(ctx, "build a review panel");
     const program = await requireProgram(args.programId, ownerEmail);
-    const names = new Set(args.reviewers.map((r) => r.name.toLowerCase()));
+    // Reviewers are named by role only: neutral for every applicant, and plainly simulated.
+    const named = args.reviewers.map((rev) => {
+      const role = rev.role.trim().replace(/\s+/g, " ");
+      return { ...rev, role, name: role.charAt(0).toUpperCase() + role.slice(1) };
+    });
+    const names = new Set(named.map((r) => r.name.toLowerCase()));
     if (names.size !== 3)
-      fail("The three reviewers need different names.", { errorCode: "duplicate_reviewer" });
+      fail("The three reviewers need different roles.", { errorCode: "duplicate_reviewer" });
 
     const db = getDb();
     const r = schema.reviewers;
@@ -108,7 +114,7 @@ export default defineAction({
       .from(r)
       .where(and(eq(r.programId, program.id), eq(r.ownerEmail, ownerEmail)));
     const base = slugify(program.title, 28);
-    const rows = args.reviewers.map((rev, i) => {
+    const rows = named.map((rev, i) => {
       const slug = `${base}-${slugify(rev.role, 20)}-${i + 1}`;
       return {
         id: crypto.randomUUID(),
@@ -132,7 +138,7 @@ export default defineAction({
       if (res) await resourceDelete(res.id);
     }
     for (const [i, row] of rows.entries()) {
-      const rev = args.reviewers[i]!;
+      const rev = named[i]!;
       await resourcePut(
         ownerEmail,
         row.agentPath,

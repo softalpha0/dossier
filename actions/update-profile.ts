@@ -39,7 +39,7 @@ export default defineAction({
       .max(64)
       .nullable()
       .optional()
-      .describe('IANA timezone, e.g. "Africa/Lagos"'),
+      .describe('IANA timezone, e.g. "Europe/London"'),
     programTypes: z
       .array(z.enum(PROGRAM_TYPES))
       .optional()
