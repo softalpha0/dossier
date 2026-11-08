@@ -73,7 +73,9 @@ Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "pro
 ### Workflow: add a program from a link
 
 1. `fetch-program-page({ url })`. If it fails, explain in one line and ask the user to paste the text.
+   - **Listing pages** (aggregators, "open now" lists, calendars, funder indexes) cover many programs: never merge them. Ask which one (`ask-question`, showing name + deadline), then find that program in `links` and `fetch-program-page` its own page — the official site, not another aggregator — before extracting. If no official link exists, extract from the listing and say so in `summary`.
 2. Extract only what the text states. Unknown values are `null` (UI shows "Not stated"); never guess limits, dates or eligibility.
 3. Deadline: ISO 8601 with the program's UTC offset in `deadlineAt`, IANA zone in `deadlineTimezone`, the original wording in `deadlineText`. A date without a time means 23:59 in the program's timezone.
 4. Documents, references, forms, tests and fees become `requirements` (checklist items) with short labels.
-5. `add-program(...)` once, then `navigate({ view: "program", programId: id })`, then summarise in 2–3 short lines including anything not stated.
+5. `sourceUrl` is the page the facts came from (the official page when you followed one).
+6. `add-program(...)` once, then `navigate({ view: "program", programId: id })`, then summarise in 2–3 short lines including anything not stated.

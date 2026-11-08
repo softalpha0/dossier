@@ -2,14 +2,14 @@ import { defineAction, fail } from "@agent-native/core/action";
 import { ssrfSafeFetch } from "@agent-native/core/extensions/url-safety";
 import { z } from "zod";
 
-import { htmlToText, sha256Hex } from "../server/lib/dossier.js";
+import { extractLinks, htmlToText, sha256Hex } from "../server/lib/dossier.js";
 
 const MAX_BYTES = 3_000_000;
 const MAX_TEXT = 60_000;
 
 export default defineAction({
   description:
-    "Fetch a program's official web page and return its readable text (no AI, no guessing). Use it before add-program to read rules, eligibility, documents, questions, word limits, criteria and the deadline. Only public http(s) pages; PDFs and pages that need a login cannot be read — then ask the user to paste the text.",
+    "Fetch a program's web page and return its readable text plus its links (no AI, no guessing). Use it before add-program to read rules, eligibility, documents, questions, word limits, criteria and the deadline. If the page lists several programs, ask the user which one, then fetch that program's own page from `links` (prefer the official site over aggregators). Only public http(s) pages; PDFs and pages that need a login cannot be read — then ask the user to paste the text.",
   schema: z.object({
     url: z
       .string()
@@ -58,9 +58,9 @@ export default defineAction({
         statusCode: 413,
       });
     const raw = new TextDecoder("utf-8").decode(buf);
-    const { title, text } = type.includes("html") || /<html|<body/i.test(raw)
-      ? htmlToText(raw)
-      : { title: "", text: raw.trim() };
+    const isHtml = type.includes("html") || /<html|<body/i.test(raw);
+    const { title, text } = isHtml ? htmlToText(raw) : { title: "", text: raw.trim() };
+    const links = isHtml ? extractLinks(raw, res.url || url) : [];
     if (text.length < 200)
       fail(
         "This page has almost no readable text (it may load its content with JavaScript). Paste the program text instead.",
@@ -74,6 +74,7 @@ export default defineAction({
       title,
       text: body,
       truncated,
+      links,
       hash: await sha256Hex(text),
       fetchedAt: new Date().toISOString(),
     };

@@ -115,6 +115,40 @@ export function htmlToText(html: string): { title: string; text: string } {
   return { title, text: s };
 }
 
+export interface PageLink {
+  text: string;
+  url: string;
+}
+
+/** Links on a page (absolute http(s) URLs with their visible text), deduplicated. */
+export function extractLinks(html: string, baseUrl: string, limit = 150): PageLink[] {
+  const body = html
+    .replace(/<(script|style|noscript|svg|template)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<head[\s\S]*?<\/head>/gi, " ");
+  const out: PageLink[] = [];
+  const seen = new Set<string>();
+  const re = /<a\b[^>]*\bhref\s*=\s*(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(body)) && out.length < limit) {
+    const href = (m[2] ?? "").trim();
+    if (!href || /^(#|mailto:|tel:|javascript:)/i.test(href)) continue;
+    let url: string;
+    try {
+      const u = new URL(href.replace(/&amp;/g, "&"), baseUrl);
+      if (u.protocol !== "https:" && u.protocol !== "http:") continue;
+      u.hash = "";
+      url = u.toString();
+    } catch {
+      continue;
+    }
+    const text = htmlToText(`<p>${m[3] ?? ""}</p>`).text.replace(/\s+/g, " ").trim().slice(0, 120);
+    if (!text || seen.has(url)) continue;
+    seen.add(url);
+    out.push({ text, url });
+  }
+  return out;
+}
+
 export async function sha256Hex(text: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
   return Array.from(new Uint8Array(buf))
