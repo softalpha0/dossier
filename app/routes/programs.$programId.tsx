@@ -6,8 +6,6 @@ import {
 import {
   IconAlertTriangle,
   IconArrowLeft,
-  IconCircle,
-  IconCircleCheck,
   IconExternalLink,
   IconTrash,
 } from "@tabler/icons-react";
@@ -26,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@agent-native/toolkit/ui/alert-dialog";
 import { CommitteePanel } from "@/components/dossier/CommitteePanel";
+import { ChecklistSection, EligibilitySection } from "@/components/dossier/ProgramSections";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deadlineView, STAGES, TONE_CLASSES, typeLabel } from "@/lib/dossier";
@@ -35,15 +34,6 @@ export function meta() {
   return [{ title: "Program · Dossier" }];
 }
 
-const KIND_LABELS: Record<string, string> = {
-  document: "Document",
-  reference: "Reference",
-  form: "Form",
-  test: "Test",
-  fee: "Fee",
-  interview: "Interview",
-  other: "Other",
-};
 
 export default function ProgramDetail() {
   const { programId = "" } = useParams();
@@ -81,7 +71,6 @@ export default function ProgramDetail() {
 
   const { program, requirements, questions } = query.data;
   const dl = deadlineView(program.deadlineAt, program.deadlineTz, profile.data?.profile?.timezone);
-  const done = requirements.filter((r) => r.done).length;
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 lg:py-10">
@@ -162,45 +151,14 @@ export default function ProgramDetail() {
       )}
 
       <div className="mt-10 grid gap-10 lg:grid-cols-2">
-        <Section title="Eligibility" empty="No eligibility rules stated.">
-          {program.eligibility.length ? (
-            <ul className="space-y-2">
-              {program.eligibility.map((e, i) => (
-                <li key={i} className="flex gap-2 text-sm">
-                  <span className="mt-0.5 shrink-0 rounded bg-secondary px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                    {e.category}
-                  </span>
-                  <span>{e.rule}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </Section>
-
-        <Section
-          title="Checklist"
-          aside={requirements.length ? `${done} of ${requirements.length} done` : undefined}
-          empty="No documents or references stated."
-        >
-          {requirements.length ? (
-            <ul className="space-y-2">
-              {requirements.map((r) => (
-                <li key={r.id} className="flex gap-2 text-sm">
-                  {r.done ? (
-                    <IconCircleCheck className="mt-0.5 size-4 shrink-0 text-primary" />
-                  ) : (
-                    <IconCircle className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-                  )}
-                  <span>
-                    <span className={cn(r.done && "text-muted-foreground line-through")}>{r.label}</span>
-                    <span className="ml-2 text-xs text-muted-foreground">{KIND_LABELS[r.kind] ?? r.kind}</span>
-                    {r.details ? <span className="block text-muted-foreground">{r.details}</span> : null}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </Section>
+        <EligibilitySection
+          programId={program.id}
+          programTitle={program.title}
+          rules={program.eligibility}
+          result={program.eligibilityResult}
+          checkedAt={program.eligibilityCheckedAt}
+        />
+        <ChecklistSection programId={program.id} items={requirements} onChanged={() => void query.refetch()} />
       </div>
 
       <div className="mt-10">

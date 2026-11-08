@@ -110,6 +110,35 @@ CREATE TABLE IF NOT EXISTS panel_reviews (
 CREATE INDEX IF NOT EXISTS panel_reviews_program_idx ON panel_reviews (owner_email, program_id, created_at);
 CREATE INDEX IF NOT EXISTS panel_reviews_run_idx ON panel_reviews (run_id)`,
     },
+    {
+      version: 3,
+      name: "eligibility-stories-writing-samples",
+      sql: `ALTER TABLE programs ADD COLUMN IF NOT EXISTS eligibility_result_json TEXT;
+ALTER TABLE programs ADD COLUMN IF NOT EXISTS eligibility_checked_at TEXT;
+CREATE TABLE IF NOT EXISTS stories (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  situation TEXT,
+  action TEXT,
+  result TEXT,
+  themes TEXT,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now()),
+  updated_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS stories_owner_idx ON stories (owner_email, updated_at);
+CREATE TABLE IF NOT EXISTS writing_samples (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  word_count INTEGER NOT NULL DEFAULT 0,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS writing_samples_owner_idx ON writing_samples (owner_email, created_at)`,
+    },
   ],
   { table: "dossier_migrations" },
 );

@@ -25,6 +25,14 @@ const INITIAL_TOOL_NAMES = [
   "get-review-panel",
   "save-panel-review",
   "agent-teams",
+  "save-eligibility-check",
+  "update-checklist-item",
+  "add-checklist-item",
+  "list-stories",
+  "add-story",
+  "update-story",
+  "list-writing-samples",
+  "add-writing-sample",
 ];
 
 export default createAgentChatPlugin({

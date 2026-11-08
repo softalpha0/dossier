@@ -16,6 +16,7 @@ import { AgentNativeIcon } from "@agent-native/toolkit/app/shared/AgentNativeIco
 import {
   IconEdit,
   IconHome,
+  IconBook,
   IconLayoutKanban,
   IconUser,
   IconLayoutSidebarLeftCollapse,
@@ -121,6 +122,7 @@ function persistActiveThreadId(threadId: string) {
 
 const DOSSIER_NAV = [
   { to: "/programs", label: "Programs", Icon: IconLayoutKanban },
+  { to: "/stories", label: "Stories", Icon: IconBook },
   { to: "/profile", label: "Profile", Icon: IconUser },
 ] as const;
 

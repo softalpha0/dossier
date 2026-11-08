@@ -36,6 +36,8 @@ export const programs = pgTable("programs", {
   deadlineText: text("deadline_text"), // deadline as written on the page
   status: text("status").notNull().default("researching"),
   snapshotText: text("snapshot_text"),
+  eligibilityResultJson: text("eligibility_result_json"), // JSON {overall, items[], missing[]}
+  eligibilityCheckedAt: text("eligibility_checked_at"),
   snapshotHash: text("snapshot_hash"),
   lastCheckedAt: text("last_checked_at"),
   ownerEmail: text("owner_email").notNull(),
@@ -98,6 +100,29 @@ export const panelReviews = pgTable("panel_reviews", {
   bestLine: text("best_line"),
   weakestLine: text("weakest_line"),
   fix: text("fix"),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+});
+
+export const stories = pgTable("stories", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  situation: text("situation"),
+  action: text("action"),
+  result: text("result"),
+  themes: text("themes"), // JSON array of short theme tags
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+  updatedAt: text("updated_at").notNull().default(sql`now()`),
+});
+
+export const writingSamples = pgTable("writing_samples", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  wordCount: integer("word_count").notNull().default(0),
   ownerEmail: text("owner_email").notNull(),
   orgId: text("org_id"),
   createdAt: text("created_at").notNull().default(sql`now()`),

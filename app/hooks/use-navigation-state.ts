@@ -86,6 +86,7 @@ function viewForPath(pathname: string): string {
   if (programIdFromPath(pathname)) return "program";
   if (pathname === "/programs") return "programs";
   if (pathname.startsWith("/profile")) return "profile";
+  if (pathname.startsWith("/stories")) return "stories";
   if (pathname.startsWith("/database")) return "database";
   if (pathname.startsWith("/extensions")) return "extensions";
   if (pathname.startsWith("/observability")) return "observability";
@@ -108,6 +109,8 @@ function pathForView(view?: string): string {
       return "/programs";
     case "profile":
       return "/profile";
+    case "stories":
+      return "/stories";
     case "database":
       return "/database";
     case "extensions":

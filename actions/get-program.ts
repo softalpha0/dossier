@@ -10,6 +10,21 @@ import {
   requireUser,
 } from "../server/lib/dossier.js";
 
+type EligibilityResult = {
+  overall: "eligible" | "blockers" | "needs_info" | "no_rules";
+  items: { rule: string; status: "ok" | "blocker" | "unknown"; reason: string }[];
+  missing: string[];
+};
+
+function parseEligibility(value: string | null): EligibilityResult | null {
+  if (!value) return null;
+  try {
+    return JSON.parse(value) as EligibilityResult;
+  } catch {
+    return null;
+  }
+}
+
 export default defineAction({
   description:
     "Get one program with its eligibility rules, checklist items (requirements), questions with limits, selection criteria, deadline and source URL.",
@@ -73,6 +88,8 @@ export default defineAction({
         eligibility: parseJsonArray<{ rule: string; category: string }>(
           program.eligibilityJson,
         ),
+        eligibilityCheckedAt: program.eligibilityCheckedAt,
+        eligibilityResult: parseEligibility(program.eligibilityResultJson),
         criteria: parseJsonArray<{ criterion: string; detail: string | null }>(
           program.criteriaJson,
         ),

@@ -178,3 +178,8 @@ export function verdictFor(average: number): Verdict {
   if (average >= 3) return "Borderline";
   return "Unlikely";
 }
+
+export function countWords(text: string): number {
+  const t = text.trim();
+  return t ? t.split(/\s+/).length : 0;
+}

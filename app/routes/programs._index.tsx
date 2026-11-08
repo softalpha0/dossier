@@ -1,9 +1,21 @@
-import { actionErrorMessage, useActionQuery } from "@agent-native/core/client/hooks";
-import { IconAlertTriangle, IconChecklist, IconFileText } from "@tabler/icons-react";
+import {
+  actionErrorMessage,
+  useActionMutation,
+  useActionQuery,
+} from "@agent-native/core/client/hooks";
+import { IconAlertTriangle, IconChecklist, IconDots, IconFileText } from "@tabler/icons-react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import { AddProgramDialog } from "@/components/dossier/AddProgramDialog";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deadlineView, STAGES, TONE_CLASSES, typeLabel } from "@/lib/dossier";
 import { cn } from "@/lib/utils";
@@ -95,28 +107,58 @@ export default function ProgramsBoard() {
 
 function ProgramCard({ program, userTz }: { program: ProgramRow; userTz: string | null }) {
   const dl = deadlineView(program.deadlineAt, program.deadlineTz, userTz);
+  const move = useActionMutation("update-program-status");
   return (
-    <Link
-      to={`/programs/${program.id}`}
-      className="block rounded-lg border bg-card p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <p className="text-xs uppercase tracking-wide text-muted-foreground">
-        {typeLabel(program.type)}
-        {program.provider ? ` · ${program.provider}` : ""}
-      </p>
-      <p className="mt-1 font-medium leading-snug">{program.title}</p>
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-        <span className={cn("rounded px-2 py-0.5 font-medium", TONE_CLASSES[dl.tone])}>{dl.badge}</span>
-        <span className="inline-flex items-center gap-1 text-muted-foreground">
-          <IconChecklist className="size-3.5" />
-          {program.checklistDone}/{program.checklistTotal}
-        </span>
-        <span className="inline-flex items-center gap-1 text-muted-foreground">
-          <IconFileText className="size-3.5" />
-          {program.questionCount} {program.questionCount === 1 ? "question" : "questions"}
-        </span>
-      </div>
-    </Link>
+    <div className="relative rounded-lg border bg-card transition-colors hover:border-primary/50 focus-within:border-primary/50">
+      <Link
+        to={`/programs/${program.id}`}
+        className="block rounded-lg p-4 pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          {typeLabel(program.type)}
+          {program.provider ? ` · ${program.provider}` : ""}
+        </p>
+        <p className="mt-1 font-medium leading-snug">{program.title}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+          <span className={cn("rounded px-2 py-0.5 font-medium", TONE_CLASSES[dl.tone])}>{dl.badge}</span>
+          <span className="inline-flex items-center gap-1 text-muted-foreground">
+            <IconChecklist className="size-3.5" />
+            {program.checklistDone}/{program.checklistTotal}
+          </span>
+          <span className="inline-flex items-center gap-1 text-muted-foreground">
+            <IconFileText className="size-3.5" />
+            {program.questionCount} {program.questionCount === 1 ? "question" : "questions"}
+          </span>
+        </div>
+      </Link>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          aria-label={`Move ${program.title} to another stage`}
+          className="absolute right-2 top-2 rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconDots className="size-4" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Move to</DropdownMenuLabel>
+          {STAGES.filter((st) => st.id !== program.status).map((st) => (
+            <DropdownMenuItem
+              key={st.id}
+              onSelect={() =>
+                move.mutate(
+                  { id: program.id, status: st.id },
+                  {
+                    onSuccess: () => toast.success(`Moved to ${st.label}`),
+                    onError: (err) => toast.error(actionErrorMessage(err) ?? "Couldn't move it."),
+                  },
+                )
+              }
+            >
+              {st.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
 
