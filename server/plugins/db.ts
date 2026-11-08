@@ -1,0 +1,77 @@
+import { runMigrations } from "@agent-native/core/db";
+
+// Additive only: never edit an entry once it has run; append a new version.
+export default runMigrations(
+  [
+    {
+      version: 1,
+      name: "profiles-programs-requirements-questions",
+      sql: `CREATE TABLE IF NOT EXISTS profiles (
+  id TEXT PRIMARY KEY,
+  first_name TEXT,
+  country TEXT,
+  citizenship TEXT,
+  education_level TEXT,
+  field TEXT,
+  work_years INTEGER,
+  goals TEXT,
+  timezone TEXT,
+  program_types TEXT,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now()),
+  updated_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE UNIQUE INDEX IF NOT EXISTS profiles_owner_idx ON profiles (owner_email);
+CREATE TABLE IF NOT EXISTS programs (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  type TEXT NOT NULL,
+  provider TEXT,
+  source_url TEXT,
+  summary TEXT,
+  eligibility_json TEXT,
+  criteria_json TEXT,
+  deadline_at TEXT,
+  deadline_tz TEXT,
+  deadline_text TEXT,
+  status TEXT NOT NULL DEFAULT 'researching',
+  snapshot_text TEXT,
+  snapshot_hash TEXT,
+  last_checked_at TEXT,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now()),
+  updated_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS programs_owner_idx ON programs (owner_email, created_at);
+CREATE TABLE IF NOT EXISTS requirements (
+  id TEXT PRIMARY KEY,
+  program_id TEXT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,
+  label TEXT NOT NULL,
+  details TEXT,
+  done BOOLEAN NOT NULL DEFAULT FALSE,
+  sort INTEGER NOT NULL DEFAULT 0,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS requirements_program_idx ON requirements (program_id, sort);
+CREATE TABLE IF NOT EXISTS questions (
+  id TEXT PRIMARY KEY,
+  program_id TEXT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+  sort INTEGER NOT NULL DEFAULT 0,
+  text TEXT NOT NULL,
+  word_limit INTEGER,
+  char_limit INTEGER,
+  notes TEXT,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS questions_program_idx ON questions (program_id, sort)`,
+    },
+  ],
+  { table: "dossier_migrations" },
+);

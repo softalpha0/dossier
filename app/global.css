@@ -1,4 +1,5 @@
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/newsreader";
 
 @import "tailwindcss";
 @import "@agent-native/toolkit/styles.css";
@@ -6,33 +7,33 @@
 @source "./**/*.{ts,tsx}";
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 10%;
+  --background: 40 33% 98%;
+  --foreground: 222 18% 14%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 10%;
+  --card-foreground: 222 18% 14%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
-  --primary: 0 0% 15%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 95%;
-  --secondary-foreground: 0 0% 15%;
-  --muted: 0 0% 95%;
-  --muted-foreground: 0 0% 43%;
-  --accent: 0 0% 95%;
-  --accent-foreground: 0 0% 15%;
+  --popover-foreground: 222 18% 14%;
+  --primary: 162 47% 24%;
+  --primary-foreground: 40 33% 98%;
+  --secondary: 40 22% 94%;
+  --secondary-foreground: 222 18% 18%;
+  --muted: 40 22% 94%;
+  --muted-foreground: 220 8% 40%;
+  --accent: 40 24% 92%;
+  --accent-foreground: 222 18% 16%;
   --destructive: 0 91% 71%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 90%;
-  --input: 0 0% 90%;
-  --ring: 0 0% 40%;
+  --border: 38 18% 86%;
+  --input: 38 18% 84%;
+  --ring: 162 47% 30%;
   --radius: 0.5rem;
-  --sidebar-background: 0 0% 97%;
+  --sidebar-background: 40 28% 96%;
   --sidebar-foreground: 0 0% 43%;
   --sidebar-primary: 0 0% 15%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 95%;
+  --sidebar-accent: 40 24% 91%;
   --sidebar-accent-foreground: 0 0% 15%;
-  --sidebar-border: 0 0% 90%;
+  --sidebar-border: 38 18% 88%;
   --sidebar-ring: 0 0% 40%;
   --chat-sidebar-width: 17.5rem;
   --chat-sidebar-content-inset: 0.5rem;
@@ -235,8 +236,8 @@
   --card-foreground: 0 0% 90%;
   --popover: 0 0% 15%;
   --popover-foreground: 0 0% 90%;
-  --primary: 0 0% 75%;
-  --primary-foreground: 0 0% 10%;
+  --primary: 162 38% 55%;
+  --primary-foreground: 222 18% 10%;
   --secondary: 0 0% 18%;
   --secondary-foreground: 0 0% 90%;
   --muted: 0 0% 16%;
@@ -247,7 +248,7 @@
   --destructive-foreground: 0 0% 98%;
   --border: 0 0% 24%;
   --input: 0 0% 24%;
-  --ring: 0 0% 60%;
+  --ring: 162 38% 50%;
   --radius: 0.5rem;
   --sidebar-background: 0 0% 10%;
   --sidebar-foreground: 0 0% 60%;
@@ -280,4 +281,10 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.34);
+}
+
+/* Dossier: one serif for headings, Inter for everything else. */
+.dossier-serif {
+  font-family: "Newsreader Variable", Georgia, serif;
+  letter-spacing: -0.01em;
 }

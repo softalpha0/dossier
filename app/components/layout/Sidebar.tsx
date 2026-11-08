@@ -16,6 +16,8 @@ import { AgentNativeIcon } from "@agent-native/toolkit/app/shared/AgentNativeIco
 import {
   IconEdit,
   IconHome,
+  IconLayoutKanban,
+  IconUser,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
   IconLoader2,
@@ -115,6 +117,53 @@ function persistActiveThreadId(threadId: string) {
   try {
     localStorage.setItem(CHAT_ACTIVE_THREAD_KEY, threadId);
   } catch {}
+}
+
+const DOSSIER_NAV = [
+  { to: "/programs", label: "Programs", Icon: IconLayoutKanban },
+  { to: "/profile", label: "Profile", Icon: IconUser },
+] as const;
+
+function DossierNavLink({
+  collapsed,
+  to,
+  label,
+  Icon,
+}: {
+  collapsed: boolean;
+  to: string;
+  label: string;
+  Icon: typeof IconHome;
+}) {
+  const location = useLocation();
+  const active =
+    location.pathname === to || location.pathname.startsWith(`${to}/`);
+  const link = (
+    <Link
+      to={to}
+      aria-current={active ? "page" : undefined}
+      aria-label={collapsed ? label : undefined}
+      className={cn(
+        "flex items-center text-sidebar-accent-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+        active && "bg-sidebar-accent",
+        collapsed
+          ? "size-8 justify-center rounded-md"
+          : "h-8 w-full gap-3 rounded-lg px-3 text-sm font-medium",
+      )}
+    >
+      <Icon className="size-4 shrink-0" strokeWidth={1.8} />
+      <span className={collapsed ? "sr-only" : "truncate"}>{label}</span>
+    </Link>
+  );
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>{link}</TooltipTrigger>
+        <TooltipContent side="right">{label}</TooltipContent>
+      </Tooltip>
+    );
+  }
+  return <div className="px-2">{link}</div>;
 }
 
 function HomeNavLink({ collapsed }: { collapsed: boolean }) {
@@ -408,6 +457,9 @@ export function Sidebar({
         )}
       >
         <HomeNavLink collapsed={collapsed} />
+        {DOSSIER_NAV.map((item) => (
+          <DossierNavLink key={item.to} collapsed={collapsed} {...item} />
+        ))}
         <ChatThreadsSection collapsed={collapsed} />
       </nav>
 

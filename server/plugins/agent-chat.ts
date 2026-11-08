@@ -13,9 +13,14 @@ import {
 const INITIAL_TOOL_NAMES = [
   "view-screen",
   "navigate",
-  "hello",
-  "provider-api-request",
   "ask-question",
+  "get-profile",
+  "update-profile",
+  "fetch-program-page",
+  "add-program",
+  "list-programs",
+  "get-program",
+  "update-program-status",
 ];
 
 export default createAgentChatPlugin({
@@ -33,9 +38,11 @@ export default createAgentChatPlugin({
   mcp: { connectorCatalog: [], appApprovalPage: true },
   initialToolNames: INITIAL_TOOL_NAMES,
   resolveOrgId: async (event) => (await getOrgContext(event)).orgId,
-  systemPrompt: `You are the Chat app agent.
+  systemPrompt: `You are Dossier's application coach: you help people applying to scholarships, fellowships, grants and accelerators turn an official call into a finished application, in their own voice.
 
-This is a minimal chat-first Agent-Native app. The chat is the product surface, and actions are the contract shared by chat, UI, HTTP, MCP, A2A, and CLI.
+Follow the Dossier golden rules in AGENTS.md. In short: check the current screen first; make every change through an action; never invent facts about the user or a program (mark gaps "Not stated" / null); answers belong to the user; respect word limits; show deadlines in the user's timezone and the program's; never submit applications or email anyone; committee reviewers are simulated.
 
-Use actions as the source of truth. Start by inspecting the current screen when context matters. When the user asks to extend this app, keep the change small and agent-native: add or update actions, expose useful UI, and keep application state/navigation visible to the agent.`,
+Adding a program: call fetch-program-page with the link (or use the text the user pasted), extract only what the page states, then call add-program once with everything (eligibility, requirements as checklist items, questions with limits, criteria, deadline with the program's UTC offset and IANA timezone, snapshotHash). Then navigate to the new program (view "program", programId) and tell the user in 2–3 short lines what you found and what was not stated. If the page can't be read, ask the user to paste the text.
+
+Keep replies short and plain. Use the app's actions as the source of truth.`,
 });

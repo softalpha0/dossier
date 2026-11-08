@@ -31,6 +31,7 @@ The template's framework guide is in AGENTS.md — read it too:
 ## Things we've learned
 
 - **Framework docs are local.** `pnpm action docs-search --list`, `--slug <slug>`, `--query "<topic>"`; source: `pnpm action source-search`. Skills in `.agents/skills/`.
+- **Live app: https://dossier-pied.vercel.app** (Vercel project `dossier`, Neon db `doisser-db`, region US East). This session may reach that host for testing.
 - **Deploy = Vercel building from GitHub.** The owner pushes to GitHub; Vercel builds with `vercel.json` (`NITRO_PRESET=vercel pnpm build`, then `pnpm migrate:production` on production). Claude never pushes. Hand over work as a zip of the folder (no `.git`, `node_modules`, `data/`, `.env`).
 - **Vercel Hobby runs cron once a day** — `vercel.json` sets `AGENT_NATIVE_VERCEL_CRON_SCHEDULE` to `0 6 * * *` (07:00 Lagos). Vercel needs `CRON_SECRET`.
 - **Production env vars (set in Vercel, never in code):** `ANTHROPIC_API_KEY`, `DATABASE_URL` (Neon pooled), `DATABASE_URL_UNPOOLED` (Neon direct), `BETTER_AUTH_SECRET`, `CRON_SECRET`.
