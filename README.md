@@ -94,10 +94,6 @@ Telegram (optional): after deploying, run once `POST https://<your-app>/_agent-n
 
 [softalpha0](https://github.com/softalpha0) — solo builder
 
-## Contributors
-
-- [softalpha0](https://github.com/softalpha0) — product, design decisions, testing, deployment
-- **Claude (Anthropic)** — AI pair programmer via Claude Code: wrote code under softalpha0's direction. All commits and pushes are made by softalpha0.
 
 ## What's next
 
