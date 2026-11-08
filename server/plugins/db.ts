@@ -72,6 +72,44 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 CREATE INDEX IF NOT EXISTS questions_program_idx ON questions (program_id, sort)`,
     },
+    {
+      version: 2,
+      name: "committee-reviewers-and-panel-reviews",
+      sql: `CREATE TABLE IF NOT EXISTS reviewers (
+  id TEXT PRIMARY KEY,
+  program_id TEXT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+  slug TEXT NOT NULL,
+  name TEXT NOT NULL,
+  role TEXT NOT NULL,
+  "values" TEXT,
+  penalises TEXT,
+  rubric_json TEXT,
+  agent_path TEXT NOT NULL,
+  sort INTEGER NOT NULL DEFAULT 0,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS reviewers_program_idx ON reviewers (owner_email, program_id, sort);
+CREATE TABLE IF NOT EXISTS panel_reviews (
+  id TEXT PRIMARY KEY,
+  run_id TEXT NOT NULL,
+  program_id TEXT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+  question_id TEXT,
+  answer_id TEXT,
+  answer_text TEXT NOT NULL,
+  reviewer_id TEXT NOT NULL,
+  score INTEGER NOT NULL CHECK (score BETWEEN 1 AND 5),
+  best_line TEXT,
+  weakest_line TEXT,
+  fix TEXT,
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  created_at TEXT NOT NULL DEFAULT (now())
+);
+CREATE INDEX IF NOT EXISTS panel_reviews_program_idx ON panel_reviews (owner_email, program_id, created_at);
+CREATE INDEX IF NOT EXISTS panel_reviews_run_idx ON panel_reviews (run_id)`,
+    },
   ],
   { table: "dossier_migrations" },
 );

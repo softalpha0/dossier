@@ -69,3 +69,36 @@ export const questions = pgTable("questions", {
   orgId: text("org_id"),
   createdAt: text("created_at").notNull().default(sql`now()`),
 });
+
+export const reviewers = pgTable("reviewers", {
+  id: text("id").primaryKey(),
+  programId: text("program_id").notNull(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  values: text("values"),
+  penalises: text("penalises"),
+  rubricJson: text("rubric_json"), // JSON [{criterion, lookFor}]
+  agentPath: text("agent_path").notNull(), // agents/<slug>.md resource
+  sort: integer("sort").notNull().default(0),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+});
+
+export const panelReviews = pgTable("panel_reviews", {
+  id: text("id").primaryKey(),
+  runId: text("run_id").notNull(),
+  programId: text("program_id").notNull(),
+  questionId: text("question_id"),
+  answerId: text("answer_id"),
+  answerText: text("answer_text").notNull(),
+  reviewerId: text("reviewer_id").notNull(),
+  score: integer("score").notNull(),
+  bestLine: text("best_line"),
+  weakestLine: text("weakest_line"),
+  fix: text("fix"),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+});

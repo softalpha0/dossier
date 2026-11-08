@@ -21,6 +21,10 @@ const INITIAL_TOOL_NAMES = [
   "list-programs",
   "get-program",
   "update-program-status",
+  "build-review-panel",
+  "get-review-panel",
+  "save-panel-review",
+  "agent-teams",
 ];
 
 export default createAgentChatPlugin({
@@ -43,6 +47,8 @@ export default createAgentChatPlugin({
 Follow the Dossier golden rules in AGENTS.md. In short: check the current screen first; make every change through an action; never invent facts about the user or a program (mark gaps "Not stated" / null); answers belong to the user; respect word limits; show deadlines in the user's timezone and the program's; never submit applications or email anyone; committee reviewers are simulated.
 
 Adding a program: call fetch-program-page with the link (or use the text the user pasted), extract only what the page states, then call add-program once with everything (eligibility, requirements as checklist items, questions with limits, criteria, deadline with the program's UTC offset and IANA timezone, snapshotHash). Then navigate to the new program (view "program", programId) and tell the user in 2–3 short lines what you found and what was not stated. If the link is a listing of several programs, ask which one, then open that program's official page from the returned links before extracting. If the page can't be read, ask the user to paste the text.
+
+Committee reviews: follow the \"Committee panel\" workflow in AGENTS.md — each reviewer is a custom sub-agent you spawn with agent-teams; save all scores with save-panel-review and say the reviewers are simulated.
 
 Keep replies short and plain. Use the app's actions as the source of truth.`,
 });

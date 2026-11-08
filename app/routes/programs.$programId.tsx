@@ -25,6 +25,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@agent-native/toolkit/ui/alert-dialog";
+import { CommitteePanel } from "@/components/dossier/CommitteePanel";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deadlineView, STAGES, TONE_CLASSES, typeLabel } from "@/lib/dossier";
@@ -235,6 +236,10 @@ export default function ProgramDetail() {
             </ul>
           ) : null}
         </Section>
+      </div>
+
+      <div className="mt-10">
+        <CommitteePanel programId={program.id} programTitle={program.title} />
       </div>
 
       <footer className="mt-12 border-t pt-6">

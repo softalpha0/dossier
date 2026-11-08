@@ -69,6 +69,9 @@ Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "pro
 | `list-programs` / `get-program` | Board rows / one program with its checklist and questions. |
 | `update-program-status` | Move between stages: researching, preparing, ready, submitted, shortlisted, result. |
 | `delete-program` | Only when the user explicitly asks; confirm first. |
+| `build-review-panel` | Create the program's 3 simulated reviewers; each becomes a sub-agent profile `agents/<slug>.md`. |
+| `get-review-panel` | Reviewers (ids, names, `agentPath`) and the latest review run with its verdict. |
+| `save-panel-review` | Save one run (all reviewers' scores, best/weakest line, fix); returns average and verdict. |
 
 ### Workflow: add a program from a link
 
@@ -79,3 +82,16 @@ Navigate with `navigate({ view: "program", programId })`, `navigate({ view: "pro
 4. Documents, references, forms, tests and fees become `requirements` (checklist items) with short labels.
 5. `sourceUrl` is the page the facts came from (the official page when you followed one).
 6. `add-program(...)` once, then `navigate({ view: "program", programId: id })`, then summarise in 2–3 short lines including anything not stated.
+
+### Workflow: committee panel (simulated reviewers)
+
+Building the panel:
+1. `get-program` and read its criteria, summary and type. If no criteria are stated, base the personas on the program type and summary and say so.
+2. `build-review-panel` with three distinct reviewers (for example an academic or technical expert, a program officer focused on mission fit, an alumni or community reviewer). Tie every rubric line to something the program states.
+
+Reviewing an answer (the user pastes it, or later the open answer in the editor):
+1. `get-review-panel`; build the panel first if it is empty.
+2. For each reviewer, call `agent-teams` with `action: "spawn"`, `agent: <agentPath>`, and a message containing the exact question and the exact answer text. Run the three in parallel, then `read-result` each.
+3. Parse each reviewer's JSON (`score`, `best_line`, `weakest_line`, `fix`). If one is malformed, ask that reviewer once more; never make up a score.
+4. `save-panel-review` once with all reviews and the exact answer text.
+5. Reply: verdict and average first, then one line per reviewer (score + fix), and say clearly that the committee is simulated. Offer fixes as suggestions; never rewrite the user's answer yourself.

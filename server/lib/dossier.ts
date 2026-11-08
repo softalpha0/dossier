@@ -155,3 +155,26 @@ export async function sha256Hex(text: string): Promise<string> {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
+
+/** lowercase-hyphen slug, ascii only, bounded. */
+export function slugify(value: string, max = 40): string {
+  return (
+    value
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, max)
+      .replace(/-+$/g, "") || "item"
+  );
+}
+
+export type Verdict = "Likely shortlist" | "Borderline" | "Unlikely";
+
+/** Fixed rule from the PRD: average >= 4 likely, 3–3.9 borderline, < 3 unlikely. */
+export function verdictFor(average: number): Verdict {
+  if (average >= 4) return "Likely shortlist";
+  if (average >= 3) return "Borderline";
+  return "Unlikely";
+}
