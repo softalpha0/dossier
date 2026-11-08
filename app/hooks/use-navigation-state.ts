@@ -19,6 +19,12 @@ export interface NavigationState {
   publicPath?: string;
   threadId?: string;
   programId?: string;
+  questionId?: string;
+}
+
+function questionIdFromPath(pathname: string): string | undefined {
+  const m = pathname.match(/^\/programs\/[^/]+\/questions\/([^/?#]+)/);
+  return m?.[1] ? decodeURIComponent(m[1]) : undefined;
 }
 
 function programIdFromPath(pathname: string): string | undefined {
@@ -71,18 +77,23 @@ function matchesPathPrefix(pathname: string, prefix: string): boolean {
 export function navigationStateForPath(pathname: string): NavigationState {
   const threadId = threadIdFromPath(pathname);
   const programId = programIdFromPath(pathname);
+  const questionId = questionIdFromPath(pathname);
   return {
     view: viewForPath(pathname),
     path: pathname,
     publicPath: appPathFromLocalRoute(pathname),
     ...(threadId ? { threadId } : {}),
     ...(programId ? { programId } : {}),
+    ...(questionId ? { questionId } : {}),
   };
 }
 
 function viewForPath(pathname: string): string {
   if (isChatPathname(pathname)) return "chat";
   if (pathname === HOME_PATH) return "home";
+  if (questionIdFromPath(pathname)) return "answer";
+  if (/^\/programs\/[^/]+\/map/.test(pathname)) return "story-map";
+  if (/^\/programs\/[^/]+\/ready/.test(pathname)) return "readiness";
   if (programIdFromPath(pathname)) return "program";
   if (pathname === "/programs") return "programs";
   if (pathname.startsWith("/profile")) return "profile";
@@ -130,6 +141,11 @@ function pathForView(view?: string): string {
 
 export function pathForCommand(command: any): string {
   const path = pathForView(command?.view);
+  const pid = typeof command?.programId === "string" ? command.programId.trim() : "";
+  if (pid && command?.view === "answer" && typeof command?.questionId === "string")
+    return `/programs/${encodeURIComponent(pid)}/questions/${encodeURIComponent(command.questionId)}`;
+  if (pid && command?.view === "story-map") return `/programs/${encodeURIComponent(pid)}/map`;
+  if (pid && command?.view === "readiness") return `/programs/${encodeURIComponent(pid)}/ready`;
   if (command?.view === "program") {
     const programId =
       typeof command?.programId === "string" ? command.programId.trim() : "";

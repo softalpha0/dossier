@@ -150,6 +150,15 @@ export default function ProgramDetail() {
         <p className="mt-3 text-sm text-muted-foreground">Added from pasted text — no official link saved.</p>
       )}
 
+      <nav aria-label="Program tools" className="mt-6 flex flex-wrap gap-2">
+        <Button asChild variant="outline">
+          <Link to={`/programs/${program.id}/map`}>Story map</Link>
+        </Button>
+        <Button asChild>
+          <Link to={`/programs/${program.id}/ready`}>Readiness &amp; export</Link>
+        </Button>
+      </nav>
+
       <div className="mt-10 grid gap-10 lg:grid-cols-2">
         <EligibilitySection
           programId={program.id}
@@ -165,17 +174,36 @@ export default function ProgramDetail() {
         <Section title="Questions" empty="No application questions stated.">
           {questions.length ? (
             <ol className="space-y-3">
-              {questions.map((q, i) => (
-                <li key={q.id} className="rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">Question {i + 1}</p>
-                  <p className="mt-1">{q.text}</p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {q.wordLimit ? `${q.wordLimit} words max` : "Word limit not stated"}
-                    {q.charLimit ? ` · ${q.charLimit} characters max` : ""}
-                  </p>
-                  {q.notes ? <p className="mt-1 text-sm text-muted-foreground">{q.notes}</p> : null}
-                </li>
-              ))}
+              {questions.map((q, i) => {
+                const a = q.answer;
+                const over = a && q.wordLimit ? a.wordCount > q.wordLimit : false;
+                return (
+                  <li key={q.id}>
+                    <Link
+                      to={`/programs/${program.id}/questions/${q.id}`}
+                      className="block rounded-lg border bg-card p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <p className="text-xs font-medium text-muted-foreground">Question {i + 1}</p>
+                      <p className="mt-1">{q.text}</p>
+                      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                        {a ? (
+                          <span className={cn("font-medium", over ? "text-red-700" : "text-foreground")}>
+                            {a.wordCount}
+                            {q.wordLimit ? ` / ${q.wordLimit}` : ""} words
+                          </span>
+                        ) : (
+                          <span>{q.wordLimit ? `${q.wordLimit} words max` : "Word limit not stated"}</span>
+                        )}
+                        {q.charLimit ? <span>{q.charLimit} characters max</span> : null}
+                        {a?.voiceScore != null ? <span>Sounds like you {a.voiceScore}/100</span> : null}
+                        {a?.panelVerdict ? <span>Committee: {a.panelVerdict}</span> : null}
+                        <span className="ml-auto font-medium text-primary">{a ? "Edit answer →" : "Write answer →"}</span>
+                      </p>
+                      {q.notes ? <p className="mt-1 text-sm text-muted-foreground">{q.notes}</p> : null}
+                    </Link>
+                  </li>
+                );
+              })}
             </ol>
           ) : null}
         </Section>

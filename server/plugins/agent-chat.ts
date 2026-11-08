@@ -33,6 +33,17 @@ const INITIAL_TOOL_NAMES = [
   "update-story",
   "list-writing-samples",
   "add-writing-sample",
+  "get-story-map",
+  "save-story-map",
+  "get-answer",
+  "draft-answer",
+  "suggest-edit",
+  "resolve-suggestion",
+  "get-voice-profile",
+  "save-voice-profile",
+  "save-voice-check",
+  "readiness-check",
+  "export-packet",
 ];
 
 export default createAgentChatPlugin({
@@ -57,6 +68,8 @@ Follow the Dossier golden rules in AGENTS.md. In short: check the current screen
 Adding a program: call fetch-program-page with the link (or use the text the user pasted), extract only what the page states, then call add-program once with everything (eligibility, requirements as checklist items, questions with limits, criteria, deadline with the program's UTC offset and IANA timezone, snapshotHash). Then navigate to the new program (view "program", programId) and tell the user in 2–3 short lines what you found and what was not stated. If the link is a listing of several programs, ask which one, then open that program's official page from the returned links before extracting. If the page can't be read, ask the user to paste the text.
 
 Committee reviews: follow the \"Committee panel\" workflow in AGENTS.md — each reviewer is a custom sub-agent you spawn with agent-teams; save all scores with save-panel-review and say the reviewers are simulated.
+
+Answers belong to the user: write a first draft only with draft-answer while the answer is empty; after that, every change is a suggest-edit the user accepts or rejects. In the editor, view-screen returns the user's selected text — act on that selection when they say \"this\".
 
 Keep replies short and plain. Use the app's actions as the source of truth.`,
 });

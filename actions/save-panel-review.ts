@@ -3,7 +3,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDb, schema } from "../server/db/index.js";
-import { requireProgram, requireUser, verdictFor } from "../server/lib/dossier.js";
+import { findAnswer, requireProgram, requireUser, verdictFor } from "../server/lib/dossier.js";
 
 export default defineAction({
   description:
@@ -49,6 +49,7 @@ export default defineAction({
         .limit(1);
       if (!row) fail("Question not found in this program.", { errorCode: "not_found", statusCode: 404 });
     }
+    const linked = args.answerId ?? (args.questionId ? (await findAnswer(args.questionId, ownerEmail))?.id : null) ?? null;
     const runId = crypto.randomUUID();
     const now = new Date().toISOString();
     await db.insert(schema.panelReviews).values(
@@ -57,7 +58,7 @@ export default defineAction({
         runId,
         programId: args.programId,
         questionId: args.questionId,
-        answerId: args.answerId ?? null,
+        answerId: linked,
         answerText: args.answerText,
         reviewerId: rev.reviewerId,
         score: rev.score,
@@ -70,6 +71,11 @@ export default defineAction({
       })),
     );
     const average = Math.round((args.reviews.reduce((s, x) => s + x.score, 0) / args.reviews.length) * 10) / 10;
+    if (linked)
+      await db
+        .update(schema.answers)
+        .set({ panelVerdict: verdictFor(average), panelAverage: average })
+        .where(and(eq(schema.answers.id, linked), eq(schema.answers.ownerEmail, ownerEmail)));
     return { runId, average, verdict: verdictFor(average), reviewers: args.reviews.length, simulated: true };
   },
 });

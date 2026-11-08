@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, real, text } from "drizzle-orm/pg-core";
 
 // Dossier data is private to each user: every row carries owner_email and
 // org_id, and every action filters on the signed-in user's email.
@@ -126,4 +126,62 @@ export const writingSamples = pgTable("writing_samples", {
   ownerEmail: text("owner_email").notNull(),
   orgId: text("org_id"),
   createdAt: text("created_at").notNull().default(sql`now()`),
+});
+
+export const storyFits = pgTable("story_fits", {
+  id: text("id").primaryKey(),
+  programId: text("program_id").notNull(),
+  questionId: text("question_id").notNull(),
+  storyId: text("story_id").notNull(),
+  score: integer("score").notNull(), // 0–100
+  reason: text("reason"),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+});
+
+export const answers = pgTable("answers", {
+  id: text("id").primaryKey(),
+  programId: text("program_id").notNull(),
+  questionId: text("question_id").notNull(),
+  storyId: text("story_id"),
+  content: text("content").notNull().default(""),
+  wordCount: integer("word_count").notNull().default(0),
+  charCount: integer("char_count").notNull().default(0),
+  voiceScore: integer("voice_score"),
+  voiceFlagsJson: text("voice_flags_json"), // JSON [{sentence, reason}]
+  voiceCheckedAt: text("voice_checked_at"),
+  panelVerdict: text("panel_verdict"),
+  panelAverage: real("panel_average"),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+  updatedAt: text("updated_at").notNull().default(sql`now()`),
+});
+
+export const suggestions = pgTable("suggestions", {
+  id: text("id").primaryKey(),
+  answerId: text("answer_id").notNull(),
+  findText: text("find_text").notNull(),
+  replaceText: text("replace_text").notNull(),
+  reason: text("reason"),
+  origin: text("origin").notNull(), // coach | voice | panel
+  status: text("status").notNull().default("pending"), // pending | accepted | rejected | stale
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  createdAt: text("created_at").notNull().default(sql`now()`),
+  resolvedAt: text("resolved_at"),
+});
+
+export const voiceProfiles = pgTable("voice_profiles", {
+  id: text("id").primaryKey(),
+  summary: text("summary"),
+  traitsJson: text("traits_json"),
+  phrasesJson: text("phrases_json"),
+  avoidJson: text("avoid_json"),
+  avgSentenceWords: real("avg_sentence_words"),
+  sampleCount: integer("sample_count").notNull().default(0),
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  updatedAt: text("updated_at").notNull().default(sql`now()`),
 });

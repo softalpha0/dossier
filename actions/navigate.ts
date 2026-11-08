@@ -12,7 +12,8 @@ export default defineAction({
     programId: z
       .string()
       .optional()
-      .describe('Program id to open, with view "program"'),
+      .describe('Program id, with view "program", "story-map", "readiness" or "answer"'),
+    questionId: z.string().optional().describe('Question id, with view "answer" (the answer editor)'),
   }),
   http: false,
   run: async (args) => {
@@ -25,7 +26,17 @@ export default defineAction({
     if (args.threadId) nav.threadId = args.threadId;
     if (args.programId) {
       nav.programId = args.programId;
-      if (!args.path) nav.path = `/programs/${encodeURIComponent(args.programId)}`;
+      const p = `/programs/${encodeURIComponent(args.programId)}`;
+      if (args.questionId) nav.questionId = args.questionId;
+      if (!args.path)
+        nav.path =
+          args.view === "answer" && args.questionId
+            ? `${p}/questions/${encodeURIComponent(args.questionId)}`
+            : args.view === "story-map"
+              ? `${p}/map`
+              : args.view === "readiness"
+                ? `${p}/ready`
+                : p;
     }
     nav._writeId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     await writeAppStateForCurrentTab("navigate", nav);

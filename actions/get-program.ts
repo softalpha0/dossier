@@ -71,6 +71,18 @@ export default defineAction({
       .where(and(eq(q.programId, id), eq(q.ownerEmail, ownerEmail)))
       .orderBy(asc(q.sort))
       .limit(100);
+    const a = schema.answers;
+    const answerRows = await db
+      .select({
+        questionId: a.questionId,
+        wordCount: a.wordCount,
+        charCount: a.charCount,
+        voiceScore: a.voiceScore,
+        panelVerdict: a.panelVerdict,
+      })
+      .from(a)
+      .where(and(eq(a.programId, id), eq(a.ownerEmail, ownerEmail)))
+      .limit(100);
     return {
       program: {
         id: program.id,
@@ -95,7 +107,15 @@ export default defineAction({
         ),
       },
       requirements,
-      questions,
+      questions: questions.map((qq) => {
+        const ans = answerRows.find((x) => x.questionId === qq.id);
+        return {
+          ...qq,
+          answer: ans
+            ? { wordCount: ans.wordCount, charCount: ans.charCount, voiceScore: ans.voiceScore, panelVerdict: ans.panelVerdict }
+            : null,
+        };
+      }),
     };
   },
 });

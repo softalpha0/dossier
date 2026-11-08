@@ -183,3 +183,108 @@ export function countWords(text: string): number {
   const t = text.trim();
   return t ? t.split(/\s+/).length : 0;
 }
+
+export function countChars(text: string): number {
+  return [...text].length;
+}
+
+/** Split prose into sentences (good enough for essays; keeps the punctuation). */
+export function splitSentences(text: string): string[] {
+  return (
+    text
+      .replace(/\s+/g, " ")
+      .match(/[^.!?]+(?:[.!?]+["'”’)]*|$)/g)
+      ?.map((s) => s.trim())
+      .filter((s) => s.split(" ").length >= 3) ?? []
+  );
+}
+
+export function averageSentenceWords(text: string): number | null {
+  const sentences = splitSentences(text);
+  if (!sentences.length) return null;
+  const total = sentences.reduce((sum, s) => sum + countWords(s), 0);
+  return Math.round((total / sentences.length) * 10) / 10;
+}
+
+/** Stock phrases committees see constantly. Flagged as "may sound generic", never as "AI". */
+export const GENERIC_PHRASES = [
+  "passionate about",
+  "in today's fast-paced world",
+  "in today’s fast-paced world",
+  "ever-evolving",
+  "ever-changing landscape",
+  "delve",
+  "tapestry",
+  "testament to",
+  "make a difference",
+  "making a difference",
+  "make an impact",
+  "leverage my",
+  "foster",
+  "synergy",
+  "cutting-edge",
+  "a unique opportunity",
+  "this prestigious",
+  "i am excited to",
+  "i am thrilled",
+  "from a young age",
+  "ever since i was a child",
+  "it is no secret",
+  "at the end of the day",
+  "think outside the box",
+  "step out of my comfort zone",
+  "i have always been",
+  "dynamic",
+  "navigate the complexities",
+  "in conclusion",
+  "a beacon",
+  "game-changer",
+  "holistic",
+  "robust",
+] as const;
+
+export function genericPhraseHits(text: string): { phrase: string; sentence: string }[] {
+  const hits: { phrase: string; sentence: string }[] = [];
+  for (const sentence of splitSentences(text)) {
+    const lower = sentence.toLowerCase();
+    for (const phrase of GENERIC_PHRASES) {
+      if (lower.includes(phrase)) {
+        hits.push({ phrase, sentence });
+        break;
+      }
+    }
+  }
+  return hits;
+}
+
+/** Load a question the user owns, with its program, or fail 404. */
+export async function requireQuestion(questionId: string, ownerEmail: string) {
+  const q = schema.questions;
+  const [row] = await getDb()
+    .select()
+    .from(q)
+    .where(and(eq(q.id, questionId), eq(q.ownerEmail, ownerEmail)))
+    .limit(1);
+  if (!row) fail("Question not found.", { errorCode: "not_found", statusCode: 404 });
+  return row;
+}
+
+export async function findAnswer(questionId: string, ownerEmail: string) {
+  const a = schema.answers;
+  const [row] = await getDb()
+    .select()
+    .from(a)
+    .where(and(eq(a.questionId, questionId), eq(a.ownerEmail, ownerEmail)))
+    .limit(1);
+  return row ?? null;
+}
+
+export function limitStatus(words: number, chars: number, wordLimit: number | null, charLimit: number | null) {
+  const overWords = wordLimit ? words - wordLimit : 0;
+  const overChars = charLimit ? chars - charLimit : 0;
+  return {
+    withinLimit: overWords <= 0 && overChars <= 0,
+    overWords: Math.max(0, overWords),
+    overChars: Math.max(0, overChars),
+  };
+}

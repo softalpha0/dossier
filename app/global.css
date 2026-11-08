@@ -288,3 +288,20 @@
   font-family: "Newsreader Variable", Georgia, serif;
   letter-spacing: -0.01em;
 }
+
+/* Dossier: printing the application packet prints only the packet. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .dossier-print,
+  .dossier-print * {
+    visibility: visible;
+  }
+  .dossier-print {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    padding: 0;
+  }
+}
