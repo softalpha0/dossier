@@ -28,6 +28,8 @@ export default function StoryMap() {
       message: "Map my stories to this program's questions.",
       context: JSON.stringify({ task: "map-stories", programId }),
       submit: true,
+      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+      newTab: true,
       openSidebar: true,
     });
   const draftFrom = (questionId: string, storyTitle: string, storyId: string) =>
@@ -35,6 +37,8 @@ export default function StoryMap() {
       message: `Draft my answer to this question from my story "${storyTitle}", then open the editor.`,
       context: JSON.stringify({ task: "draft-answer", programId, questionId, storyId }),
       submit: true,
+      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+      newTab: true,
       openSidebar: true,
     });
 

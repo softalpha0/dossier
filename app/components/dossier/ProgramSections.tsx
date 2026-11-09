@@ -54,6 +54,8 @@ export function EligibilitySection({
       message: `Check my eligibility for "${programTitle}" against my profile.`,
       context: JSON.stringify({ task: "check-eligibility", programId }),
       submit: true,
+      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+      newTab: true,
       openSidebar: true,
     });
 

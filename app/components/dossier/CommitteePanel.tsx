@@ -20,6 +20,8 @@ export function CommitteePanel({ programId, programTitle }: { programId: string;
       message: `Build the simulated committee panel for "${programTitle}" from its selection criteria.`,
       context: JSON.stringify({ task: "build-review-panel", programId }),
       submit: true,
+      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+      newTab: true,
       openSidebar: true,
     });
   const review = () =>

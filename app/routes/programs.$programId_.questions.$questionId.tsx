@@ -111,6 +111,8 @@ export default function AnswerEditor() {
       message,
       context: JSON.stringify({ task, programId, questionId }),
       submit,
+      // Submitted tasks (voice check, committee) get their own chat; "Ask coach" stays in the current one.
+      newTab: submit,
       openSidebar: true,
     });
   }

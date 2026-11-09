@@ -224,7 +224,7 @@ export default function HomePage() {
             <li key={s}>
               <button
                 type="button"
-                onClick={() => sendToAgentChat({ message: s, submit: true, openSidebar: true })}
+                onClick={() => sendToAgentChat({ message: s, submit: true, newTab: true, openSidebar: true })}
                 className="min-h-10 rounded-full border bg-card px-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 {s}

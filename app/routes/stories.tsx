@@ -76,6 +76,8 @@ export default function StoriesPage() {
         "Help me add a story to my story bank. Ask me one question at a time about the situation, what I did, and the result, then save it in my own words.",
       context: JSON.stringify({ task: "add-story" }),
       submit: true,
+      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+      newTab: true,
       openSidebar: true,
     });
 

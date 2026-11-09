@@ -67,6 +67,8 @@ export function AddProgramDialog({
         message: `Add this program to Dossier from its official page: ${url.trim()}\n${typeHint}`,
         context: JSON.stringify({ task: "add-program", sourceUrl: url.trim(), programType: type || null }),
         submit: true,
+        // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+        newTab: true,
         openSidebar: true,
       });
     } else {
@@ -75,6 +77,8 @@ export function AddProgramDialog({
         message: `Add this program to Dossier from the text I pasted (no link). ${typeHint}\n\n---\n${text.trim().slice(0, MAX_PASTE)}`,
         context: JSON.stringify({ task: "add-program", sourceUrl: null, programType: type || null }),
         submit: true,
+        // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
+        newTab: true,
         openSidebar: true,
       });
     }
