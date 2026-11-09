@@ -1,5 +1,7 @@
 # PRD — Dossier
 
+> **Note:** this is the original plan, written before building (8 Nov 2026). Some "Should" features (Telegram companion, reminders, interview prep, references) were not built, and the demo persona changed from Amara to Alex. See the [README](./README.md) for what shipped.
+
 > **Dossier helps people applying for scholarships, fellowships, grants and accelerators turn an official call into a strong, finished application — without missing a rule or sounding like a chatbot.**
 
 | | |
