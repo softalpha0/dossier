@@ -9,6 +9,7 @@ import {
   deadlineFor,
   deadlineTextFor,
   SAMPLE_ANSWER,
+  SAMPLE_CHANGE,
   SAMPLE_PROFILE_MARKER,
   SAMPLE_PROGRAMS,
   SAMPLE_STORIES,
@@ -68,7 +69,8 @@ export default defineAction({
           title: prog.title,
           type: prog.type,
           provider: prog.provider,
-          sourceUrl: null,
+          // Only the fellowship carries its (fictional, .example) link: it holds the sample page change.
+          sourceUrl: prog.title === SAMPLE_CHANGE.programTitle ? SAMPLE_CHANGE.sourceUrl : null,
           summary: prog.summary,
           eligibilityJson: JSON.stringify(prog.eligibility),
           criteriaJson: JSON.stringify(prog.criteria),
@@ -77,7 +79,7 @@ export default defineAction({
           deadlineText: deadlineTextFor(prog.daysAhead, prog.tzLabel),
           status: index === 0 ? "preparing" : "researching",
           snapshotHash: null,
-          lastCheckedAt: null,
+          lastCheckedAt: prog.title === SAMPLE_CHANGE.programTitle ? now : null,
           ownerEmail,
           orgId,
           createdAt: now,
@@ -110,6 +112,22 @@ export default defineAction({
             orgId,
           })),
         );
+        if (prog.title === SAMPLE_CHANGE.programTitle) {
+          // A fictional rules-watcher finding, so the "page changed" banner can be demonstrated.
+          await tx.insert(schema.programChanges).values({
+            id: crypto.randomUUID(),
+            programId,
+            sourceUrl: SAMPLE_CHANGE.sourceUrl,
+            oldHash: null,
+            newHash: null,
+            addedJson: JSON.stringify(SAMPLE_CHANGE.added),
+            removedJson: JSON.stringify(SAMPLE_CHANGE.removed),
+            status: "new",
+            ownerEmail,
+            orgId,
+            detectedAt: now,
+          });
+        }
         if (index === 0) {
           // The demo's starting point: a first draft that is too long and full of stock phrases.
           await tx.insert(schema.answers).values({

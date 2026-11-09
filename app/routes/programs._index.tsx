@@ -8,6 +8,7 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 
 import { AddProgramDialog } from "@/components/dossier/AddProgramDialog";
+import { BoardWatcher } from "@/components/dossier/RulesWatcher";
 import { isSample, SampleDataNotice, TrySampleDataButton } from "@/components/dossier/SampleData";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,6 +59,7 @@ export default function ProgramsBoard() {
       </header>
 
       {hasSamples ? <SampleDataNotice /> : null}
+      {rows.length ? <BoardWatcher /> : null}
 
       {programs.isLoading ? (
         <BoardSkeleton />

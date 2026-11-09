@@ -200,3 +200,14 @@ export function deadlineTextFor(daysAhead: number, tzLabel: string): string {
   const day = d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   return `${day}, 23:59 ${tzLabel}`;
 }
+
+/** One example rules-watcher finding, on the fellowship, so the "page changed" banner can be shown. */
+export const SAMPLE_CHANGE = {
+  programTitle: `Open Futures Fellowship ${SAMPLE_SUFFIX}`,
+  sourceUrl: "https://openfutures.example/fellowship",
+  added: [
+    "Short project description (max 2 pages), plus a 2-minute video introducing the project.",
+    "Shortlisted applicants will be interviewed in person in New York.",
+  ],
+  removed: ["Short project description (1 page)", "Video interview if shortlisted (30 minutes)"],
+};

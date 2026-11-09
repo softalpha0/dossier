@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@agent-native/toolkit/ui/alert-dialog";
 import { CommitteePanel } from "@/components/dossier/CommitteePanel";
+import { CheckForChanges, ProgramChangesBanner } from "@/components/dossier/RulesWatcher";
 import { ChecklistSection, EligibilitySection } from "@/components/dossier/ProgramSections";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -114,6 +115,8 @@ export default function ProgramDetail() {
         </label>
       </header>
 
+      <ProgramChangesBanner programId={program.id} programTitle={program.title} />
+
       <section aria-label="Deadline" className="mt-6 rounded-lg border bg-card p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-sm font-semibold">Deadline</h2>
@@ -138,14 +141,17 @@ export default function ProgramDetail() {
 
       {program.summary ? <p className="mt-6 text-lg leading-relaxed">{program.summary}</p> : null}
       {program.sourceUrl ? (
+        <p className="mt-3 flex flex-wrap items-center">
         <a
           href={program.sourceUrl}
           target="_blank"
           rel="noreferrer noopener"
-          className="mt-3 inline-flex items-center gap-1 text-sm text-primary underline-offset-4 hover:underline"
+          className="inline-flex items-center gap-1 text-sm text-primary underline-offset-4 hover:underline"
         >
           Official page <IconExternalLink className="size-3.5" />
         </a>
+        <CheckForChanges programId={program.id} lastCheckedAt={program.lastCheckedAt ?? null} />
+        </p>
       ) : (
         <p className="mt-3 text-sm text-muted-foreground">Added from pasted text — no official link saved.</p>
       )}

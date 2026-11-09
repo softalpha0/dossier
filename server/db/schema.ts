@@ -185,3 +185,19 @@ export const voiceProfiles = pgTable("voice_profiles", {
   orgId: text("org_id"),
   updatedAt: text("updated_at").notNull().default(sql`now()`),
 });
+
+// S1 rules watcher: what changed on a program's official page since the last check.
+export const programChanges = pgTable("program_changes", {
+  id: text("id").primaryKey(),
+  programId: text("program_id").notNull(),
+  sourceUrl: text("source_url"),
+  oldHash: text("old_hash"),
+  newHash: text("new_hash"),
+  addedJson: text("added_json").notNull().default("[]"), // JSON string[] of lines that appeared
+  removedJson: text("removed_json").notNull().default("[]"), // JSON string[] of lines that disappeared
+  status: text("status").notNull().default("new"), // new | reviewed
+  ownerEmail: text("owner_email").notNull(),
+  orgId: text("org_id"),
+  detectedAt: text("detected_at").notNull().default(sql`now()`),
+  reviewedAt: text("reviewed_at"),
+});

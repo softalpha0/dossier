@@ -203,6 +203,25 @@ CREATE TABLE IF NOT EXISTS voice_profiles (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS voice_profiles_owner_idx ON voice_profiles (owner_email)`,
     },
+    {
+      version: 5,
+      name: "program-changes-watcher",
+      sql: `CREATE TABLE IF NOT EXISTS program_changes (
+  id TEXT PRIMARY KEY,
+  program_id TEXT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+  source_url TEXT,
+  old_hash TEXT,
+  new_hash TEXT,
+  added_json TEXT NOT NULL DEFAULT '[]',
+  removed_json TEXT NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'reviewed')),
+  owner_email TEXT NOT NULL,
+  org_id TEXT,
+  detected_at TEXT NOT NULL DEFAULT (now()),
+  reviewed_at TEXT
+);
+CREATE INDEX IF NOT EXISTS program_changes_program_idx ON program_changes (owner_email, program_id, status);`,
+    },
   ],
   { table: "dossier_migrations" },
 );

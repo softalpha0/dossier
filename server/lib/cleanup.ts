@@ -25,6 +25,7 @@ export async function deleteProgramData(programId: string, ownerEmail: string) {
       and(eq(t.programId, programId), eq(t.ownerEmail, ownerEmail));
     await tx.delete(a).where(byProgram(a));
     await tx.delete(schema.storyFits).where(byProgram(schema.storyFits));
+    await tx.delete(schema.programChanges).where(byProgram(schema.programChanges));
     await tx.delete(schema.panelReviews).where(byProgram(schema.panelReviews));
     await tx.delete(r).where(byProgram(r));
     await tx.delete(schema.questions).where(byProgram(schema.questions));

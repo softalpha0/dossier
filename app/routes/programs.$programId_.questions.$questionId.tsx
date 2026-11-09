@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TAB_ID } from "@/lib/tab-id";
 import { cn } from "@/lib/utils";
+import { AdaptAnswerDialog } from "@/components/dossier/AdaptAnswerDialog";
 import { sendAgentTask } from "@/lib/agent-task";
 
 export function meta() {
@@ -230,6 +231,14 @@ export default function AnswerEditor() {
             >
               <IconMessageCircle className="size-4" /> Ask coach
             </Button>
+            <AdaptAnswerDialog
+              sourceQuestionId={questionId}
+              sourceProgramId={programId}
+              disabled={!text.trim()}
+              beforeSend={() => {
+                if (dirty) save.mutate({ questionId, content: text });
+              }}
+            />
           </div>
 
           <Panel title="Suggestions" aside={suggestions.length ? String(suggestions.length) : undefined}>
