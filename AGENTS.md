@@ -135,7 +135,7 @@ Ask one question at a time: the situation, what they personally did, the result 
 ### Workflow: drafting an answer
 
 1. `get-answer` (question, limit) and the chosen story (`list-stories`; use the best one from `get-story-map` if the user didn't pick). Read `get-profile` and the voice profile (`get-voice-profile`) so the draft sounds like them.
-2. Write in the first person, plainly, with the story's real details only — no invented numbers, names or outcomes. If something essential is missing (e.g. the result), ask before drafting. Stay at or under the word/character limit; answer the exact question.
+2. Write in the first person, plainly, with the story's real details only — no invented numbers, names, outcomes, consequences or feelings. Every sentence must be traceable to the story, the profile or the user's words; if a sentence needs a fact the story doesn't have, leave it out or ask. If something essential is missing (e.g. the result), ask before drafting. Stay at or under the word/character limit; answer the exact question.
 3. `draft-answer` (only while the answer is empty), then `navigate({ view: "answer", programId, questionId })`.
 4. If the answer already has text, never redraft it: propose specific `suggest-edit` changes.
 

@@ -39,6 +39,7 @@ import {
   type ChatRouteState,
 } from "@/lib/chat-paths";
 import { TAB_ID } from "@/lib/tab-id";
+import { sendAgentTask } from "@/lib/agent-task";
 
 const DOCS_URL = "https://www.agent-native.com/docs";
 const GITHUB_URL = "https://github.com/BuilderIO/agent-native";
@@ -224,7 +225,7 @@ export default function HomePage() {
             <li key={s}>
               <button
                 type="button"
-                onClick={() => sendToAgentChat({ message: s, submit: true, newTab: true, openSidebar: true })}
+                onClick={() => void sendAgentTask({ message: s })}
                 className="min-h-10 rounded-full border bg-card px-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 {s}

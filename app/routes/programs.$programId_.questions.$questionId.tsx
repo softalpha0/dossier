@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TAB_ID } from "@/lib/tab-id";
 import { cn } from "@/lib/utils";
+import { sendAgentTask } from "@/lib/agent-task";
 
 export function meta() {
   return [{ title: "Answer · Dossier" }];
@@ -107,14 +108,10 @@ export default function AnswerEditor() {
 
   function ask(message: string, submit: boolean, task: string) {
     if (dirty) save.mutate({ questionId, content: text });
-    sendToAgentChat({
-      message,
-      context: JSON.stringify({ task, programId, questionId }),
-      submit,
-      // Submitted tasks (voice check, committee) get their own chat; "Ask coach" stays in the current one.
-      newTab: submit,
-      openSidebar: true,
-    });
+    const context = JSON.stringify({ task, programId, questionId });
+    // Submitted tasks (voice check, committee) get their own chat; "Ask coach" prefills the current one.
+    if (submit) void sendAgentTask({ message, context });
+    else sendToAgentChat({ message, context, submit: false, openSidebar: true });
   }
 
   if (query.isLoading)

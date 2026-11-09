@@ -1,4 +1,3 @@
-import { sendToAgentChat } from "@agent-native/core/client/agent-chat";
 import { IconLink, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -17,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { PROGRAM_TYPES, typeLabel } from "@/lib/dossier";
+import { sendAgentTask } from "@/lib/agent-task";
 
 const MAX_PASTE = 20_000;
 
@@ -63,23 +63,15 @@ export function AddProgramDialog({
       : "Work out the program type from the page.";
     if (mode === "link") {
       if (!isHttpUrl(url)) return;
-      sendToAgentChat({
+      void sendAgentTask({
         message: `Add this program to Dossier from its official page: ${url.trim()}\n${typeHint}`,
         context: JSON.stringify({ task: "add-program", sourceUrl: url.trim(), programType: type || null }),
-        submit: true,
-        // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-        newTab: true,
-        openSidebar: true,
       });
     } else {
       if (text.trim().length < 80) return;
-      sendToAgentChat({
+      void sendAgentTask({
         message: `Add this program to Dossier from the text I pasted (no link). ${typeHint}\n\n---\n${text.trim().slice(0, MAX_PASTE)}`,
         context: JSON.stringify({ task: "add-program", sourceUrl: null, programType: type || null }),
-        submit: true,
-        // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-        newTab: true,
-        openSidebar: true,
       });
     }
     setOpen(false);

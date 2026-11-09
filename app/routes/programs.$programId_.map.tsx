@@ -1,4 +1,3 @@
-import { sendToAgentChat } from "@agent-native/core/client/agent-chat";
 import { actionErrorMessage, useActionQuery } from "@agent-native/core/client/hooks";
 import { IconAlertTriangle, IconArrowLeft, IconMap2 } from "@tabler/icons-react";
 import { Link, useParams } from "react-router";
@@ -6,6 +5,7 @@ import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { sendAgentTask } from "@/lib/agent-task";
 
 export function meta() {
   return [{ title: "Story map · Dossier" }];
@@ -24,22 +24,14 @@ export default function StoryMap() {
   const query = useActionQuery("get-story-map", { programId });
 
   const map = () =>
-    sendToAgentChat({
+    void sendAgentTask({
       message: "Map my stories to this program's questions.",
       context: JSON.stringify({ task: "map-stories", programId }),
-      submit: true,
-      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-      newTab: true,
-      openSidebar: true,
     });
   const draftFrom = (questionId: string, storyTitle: string, storyId: string) =>
-    sendToAgentChat({
+    void sendAgentTask({
       message: `Draft my answer to this question from my story "${storyTitle}", then open the editor.`,
       context: JSON.stringify({ task: "draft-answer", programId, questionId, storyId }),
-      submit: true,
-      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-      newTab: true,
-      openSidebar: true,
     });
 
   const back = (

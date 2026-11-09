@@ -129,8 +129,8 @@ export const SAMPLE_STORIES = [
   {
     title: `Clinic test kits ${SAMPLE_SUFFIX}`,
     situation: "In the winter of 2023 our neighbourhood clinic ran out of rapid flu test kits, and people were being sent home untested.",
-    action: "I organised 40 volunteers from my sports club and old school, set up a WhatsApp donation drive, and drove to a regional supplier twice to collect donated kits.",
-    result: "The clinic restocked within two weeks and tested about 300 people before the peak of the season. The clinic now keeps a reorder list I set up.",
+    action: "I organised 40 volunteers from my sports club and old school, set up a WhatsApp donation drive, and drove to a regional supplier twice to collect donated kits. My spreadsheet showed that most pledges arrived within an hour of my evening updates, so I posted one every night at 8.",
+    result: "The clinic restocked within two weeks and tested about 300 people before the peak of the season. Two years on, the head nurse runs the reorder list I set up and the clinic has not run out of test kits since.",
     themes: ["leadership", "community", "health"],
   },
   {

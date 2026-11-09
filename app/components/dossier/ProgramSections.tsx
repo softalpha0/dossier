@@ -1,4 +1,3 @@
-import { sendToAgentChat } from "@agent-native/core/client/agent-chat";
 import { actionErrorMessage, useActionMutation } from "@agent-native/core/client/hooks";
 import {
   IconAlertTriangle,
@@ -15,6 +14,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { sendAgentTask } from "@/lib/agent-task";
 
 type EligibilityItem = { rule: string; status: "ok" | "blocker" | "unknown"; reason: string };
 type EligibilityResult = {
@@ -50,13 +50,9 @@ export function EligibilitySection({
   checkedAt: string | null;
 }) {
   const check = () =>
-    sendToAgentChat({
+    void sendAgentTask({
       message: `Check my eligibility for "${programTitle}" against my profile.`,
       context: JSON.stringify({ task: "check-eligibility", programId }),
-      submit: true,
-      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-      newTab: true,
-      openSidebar: true,
     });
 
   return (

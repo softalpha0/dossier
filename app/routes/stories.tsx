@@ -1,4 +1,3 @@
-import { sendToAgentChat } from "@agent-native/core/client/agent-chat";
 import {
   actionErrorMessage,
   useActionMutation,
@@ -32,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { sendAgentTask } from "@/lib/agent-task";
 
 export function meta() {
   return [{ title: "Story bank · Dossier" }];
@@ -71,14 +71,10 @@ export default function StoriesPage() {
   const visible = theme ? stories.filter((s) => s.themes.includes(theme)) : stories;
 
   const withCoach = () =>
-    sendToAgentChat({
+    void sendAgentTask({
       message:
         "Help me add a story to my story bank. Ask me one question at a time about the situation, what I did, and the result, then save it in my own words.",
       context: JSON.stringify({ task: "add-story" }),
-      submit: true,
-      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-      newTab: true,
-      openSidebar: true,
     });
 
   function save() {

@@ -5,6 +5,7 @@ import { IconUsersGroup } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { sendAgentTask } from "@/lib/agent-task";
 
 const VERDICT_TONE: Record<string, string> = {
   "Likely shortlist": "bg-primary/10 text-primary",
@@ -16,13 +17,9 @@ export function CommitteePanel({ programId, programTitle }: { programId: string;
   const panel = useActionQuery("get-review-panel", { programId });
 
   const build = () =>
-    sendToAgentChat({
+    void sendAgentTask({
       message: `Build the simulated committee panel for "${programTitle}" from its selection criteria.`,
       context: JSON.stringify({ task: "build-review-panel", programId }),
-      submit: true,
-      // Each task gets its own chat, so a stuck or long earlier chat can't hold it in a queue.
-      newTab: true,
-      openSidebar: true,
     });
   const review = () =>
     sendToAgentChat({

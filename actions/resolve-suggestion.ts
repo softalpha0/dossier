@@ -38,7 +38,15 @@ export default defineAction({
           statusCode: 409,
         });
       }
-      const content = answer.content.replace(sug.findText, sug.replaceText).replace(/ {2,}/g, " ");
+      // Tidy what a removal leaves behind: doubled spaces, a space before punctuation,
+      // runs of blank lines and blank lines at the start or end.
+      const content = answer.content
+        .replace(sug.findText, sug.replaceText)
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/ +([.,;:!?])/g, "$1")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
       const wordCount = countWords(content);
       const charCount = countChars(content);
       await tx.update(a).set({ content, wordCount, charCount, updatedAt: nowIso() }).where(eq(a.id, answer.id));
