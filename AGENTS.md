@@ -173,7 +173,11 @@ When the user wants to try Dossier without their own program, `seed-demo`, then 
 
 ### Workflow: rules watcher (official page changed)
 
-`recheck-program` / `recheck-due-programs` compare the official page with the saved copy; `list-program-changes` shows the added (+) and removed (−) lines. When the user asks what a change means (`task: "explain-program-change"`): read the change and `get-program`, then say in plain words what changed (deadline, documents, limits, eligibility) and which part of their card, checklist or answers it affects. Quote the page lines; never guess. Don't edit the program automatically — offer the specific update (e.g. `add-checklist-item`) and do it only when they agree. Mark the change reviewed (`review-program-change`) only when they say so.
+`recheck-program` / `recheck-due-programs` compare the official page with the saved copy; `list-program-changes` shows the added (+) and removed (−) lines. When the user asks what a change means (`task: "explain-program-change"`): `list-program-changes({ programId })` and `get-program`, then reply in this shape, visible in the reply itself (not only in your reasoning):
+   1. **What changed** — one bullet per change, before → after, quoting the page lines (e.g. "Project description: 1 page → max 2 pages plus a 2-minute video").
+   2. **What it affects** — the checklist items, deadline, eligibility rules or answers that no longer match, by name. Changed documents or interview formats almost always mean a checklist update.
+   3. **Offer** — the exact updates you can make (e.g. `add-checklist-item` "2-minute project video"), and make them only when the user agrees.
+   Never guess beyond the quoted lines. Don't edit the program automatically — offer the specific update (e.g. `add-checklist-item`) and do it only when they agree. Mark the change reviewed (`review-program-change`) only when they say so.
 
 ### Workflow: readiness and export
 

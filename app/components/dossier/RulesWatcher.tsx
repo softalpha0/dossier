@@ -77,7 +77,7 @@ export function ProgramChangesBanner({ programId, programTitle }: { programId: s
           variant="outline"
           onClick={() =>
             void sendAgentTask({
-              message: `The official page for "${programTitle}" changed. Explain in plain words what changed and whether I should update my program card, checklist or answers.`,
+              message: `The official page for "${programTitle}" changed. List each change as before → after in plain words, then tell me exactly what to update in my checklist, deadline or answers, and offer to make those updates.`,
               context: JSON.stringify({ task: "explain-program-change", programId, changeId: latest.id }),
             })
           }
